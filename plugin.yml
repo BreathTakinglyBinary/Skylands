@@ -1,0 +1,9 @@
+name: Skylands
+description: A SkyBlock plugin for PocketMine servers.
+authors:
+  - GiantQuartz
+  - 95CivicSi
+website: http://github.com/BreathTakinglyBinary/Skylands
+main: BreathTakinglyBinary\Skylands\Skylands
+version: 1.0.0
+api: [3.0.0]
