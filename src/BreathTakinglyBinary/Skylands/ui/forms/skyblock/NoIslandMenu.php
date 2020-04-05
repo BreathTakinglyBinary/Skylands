@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace BreathTakinglyBinary\Skylands\ui\forms\skyblock;
 
 
+use BreathTakinglyBinary\libDynamicForms\SimpleForm;
 use BreathTakinglyBinary\Skylands\Skylands;
-use BreathTakinglyBinary\Skylands\ui\forms\SimpleForm;
 use pocketmine\Player;
 
 class NoIslandMenu extends SimpleForm{
@@ -19,7 +19,7 @@ class NoIslandMenu extends SimpleForm{
         $this->addButton("Visit Islands");
     }
 
-    protected function onSubmit(Player $player, $data){
+    public function onResponse(Player $player, $data) : void{
         $skyBlock = Skylands::getInstance();
         $session = $skyBlock->getSessionManager()->getSession($player);
         switch($data){
@@ -37,5 +37,4 @@ class NoIslandMenu extends SimpleForm{
         }
         $player->sendForm($form);
     }
-
 }

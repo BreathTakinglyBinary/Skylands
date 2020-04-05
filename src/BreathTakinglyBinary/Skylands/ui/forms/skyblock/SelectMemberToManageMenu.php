@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace BreathTakinglyBinary\Skylands\ui\forms\skyblock;
 
 
-use BreathTakinglyBinary\Skylands\ui\forms\SimpleForm;
-use BreathTakinglyBinary\DynamicCore\util\Utils;
+use BreathTakinglyBinary\libDynamicForms\SimpleForm;
+use BreathTakinglyBinary\Skylands\utils\SkylandsUtils;
 use pocketmine\Player;
 use BreathTakinglyBinary\Skylands\Skylands;
 
@@ -18,7 +18,7 @@ class SelectMemberToManageMenu extends SimpleForm implements MemeberManagementAc
         parent::__construct();
         $this->action = $action;
         $session = Skylands::getInstance()->getSessionManager()->getSession($islandOfficer);
-        $actionWord = Utils::getMemberManagementActionWord($action);
+        $actionWord = SkylandsUtils::getMemberManagementActionWord($action);
 
         $this->setTitle($actionWord . " Island Member");
 
@@ -31,8 +31,7 @@ class SelectMemberToManageMenu extends SimpleForm implements MemeberManagementAc
 
     }
 
-    protected function onSubmit(Player $player, $data){
+    public function onResponse(Player $player, $data) : void{
         $player->sendForm(new ConfirmMemberManagementMenu($this->action, $data));
     }
-
 }

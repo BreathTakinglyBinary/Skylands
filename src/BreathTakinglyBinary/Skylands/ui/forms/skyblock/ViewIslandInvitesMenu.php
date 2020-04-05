@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace BreathTakinglyBinary\Skylands\ui\forms\skyblock;
 
 
+use BreathTakinglyBinary\libDynamicForms\SimpleForm;
 use BreathTakinglyBinary\Skylands\isle\Isle;
 use BreathTakinglyBinary\Skylands\session\BaseSession;
 use BreathTakinglyBinary\Skylands\session\Session;
 use BreathTakinglyBinary\Skylands\Skylands;
-use BreathTakinglyBinary\Skylands\ui\forms\SimpleForm;
 use pocketmine\Player;
 
 class ViewIslandInvitesMenu extends SimpleForm{
@@ -26,7 +26,7 @@ class ViewIslandInvitesMenu extends SimpleForm{
         $this->addButton("Back", "back");
     }
 
-    protected function onSubmit(Player $player, $data){
+    public function onResponse(Player $player, $data) : void{
         if($data === "back"){
             $player->sendForm(new NoIslandMenu());
             return;

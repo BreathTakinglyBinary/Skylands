@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace BreathTakinglyBinary\Skylands\ui\forms\skyblock;
 
 
-use BreathTakinglyBinary\Skylands\ui\forms\SimpleForm;
+use BreathTakinglyBinary\libDynamicForms\SimpleForm;
 use pocketmine\Player;
 use BreathTakinglyBinary\Skylands\Skylands;
 
@@ -22,7 +22,7 @@ class IslandOwnerSettingsMenu extends SimpleForm{
         $this->addButton("Disband Island");
     }
 
-    protected function onSubmit(Player $player, $data){
+    public function onResponse(Player $player, $data) : void{
         $skyBlock = Skylands::getInstance();
         switch($data){
             case 0:

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace BreathTakinglyBinary\Skylands\ui\forms\skyblock;
 
 
-use BreathTakinglyBinary\Skylands\ui\forms\SimpleForm;
+use BreathTakinglyBinary\libDynamicForms\SimpleForm;
 use pocketmine\Player;
 use pocketmine\Server;
 use BreathTakinglyBinary\Skylands\Skylands;
@@ -23,8 +23,7 @@ class InviteToIslandMenu extends SimpleForm{
         }
     }
 
-    protected function onSubmit(Player $player, $data){
+    public function onResponse(Player $player, $data) : void{
         Server::getInstance()->dispatchCommand($player, "isle invite $data");
     }
-
 }

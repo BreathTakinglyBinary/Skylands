@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace BreathTakinglyBinary\Skylands\ui\forms\skyblock;
 
 
-use BreathTakinglyBinary\Skylands\ui\forms\SimpleForm;
+use BreathTakinglyBinary\libDynamicForms\SimpleForm;
 use pocketmine\Player;
 use BreathTakinglyBinary\Skylands\Skylands;
 
@@ -19,7 +19,7 @@ class CreateIslandMenu extends SimpleForm{
         }
     }
 
-    protected function onSubmit(Player $player, $data){
+    public function onResponse(Player $player, $data) : void{
         $skyBlock = Skylands::getInstance();
         $session = $skyBlock->getSessionManager()->getSession($player);
         if(!$session->canCreateIsland()){
@@ -32,5 +32,4 @@ class CreateIslandMenu extends SimpleForm{
         $skyBlock->getIsleManager()->createIsleFor($session, $data);
         $session->sendTranslatedMessage("SUCCESSFULLY_CREATED_A_ISLE");
     }
-
 }

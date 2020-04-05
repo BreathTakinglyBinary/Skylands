@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace BreathTakinglyBinary\Skylands\ui\forms\skyblock;
 
 
+use BreathTakinglyBinary\libDynamicForms\SimpleForm;
 use BreathTakinglyBinary\Skylands\isle\Isle;
-use BreathTakinglyBinary\Skylands\ui\forms\SimpleForm;
-use pocketmine\Player;
 use BreathTakinglyBinary\Skylands\Skylands;
+use pocketmine\Player;
 
 class VisitIslandsMenu extends SimpleForm{
 
@@ -30,7 +30,7 @@ class VisitIslandsMenu extends SimpleForm{
         $this->addButton("Back");
     }
 
-    protected function onSubmit(Player $player, $data){
+    public function onResponse(Player $player, $data) : void{
         if(isset($this->isles[$data])){
             $player->teleport($this->isles[$data]->getSpawnLocation());
             return;
@@ -38,5 +38,4 @@ class VisitIslandsMenu extends SimpleForm{
         $msg = $data === "Back" ? null : "Island $data, is not available.";
         $player->sendForm(new SkyBlockMainMenu($msg));
     }
-
 }

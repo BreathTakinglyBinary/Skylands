@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace BreathTakinglyBinary\Skylands\ui\forms\skyblock;
 
 
+use BreathTakinglyBinary\libDynamicForms\ModalForm;
 use BreathTakinglyBinary\Skylands\Skylands;
-use BreathTakinglyBinary\Skylands\ui\forms\ModalForm;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
@@ -21,7 +21,7 @@ class ConfirmDisbandIslandMenu extends ModalForm{
         $this->setButton2("No");
     }
 
-    protected function onSubmit(Player $player, $data){
+    public function onResponse(Player $player, $data) : void{
         if($data){
             $isle = Skylands::getInstance()->getSessionManager()->getSession($player)->getIsle();
             Skylands::getInstance()->getIsleManager()->disbandIsle($isle);

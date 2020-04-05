@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace BreathTakinglyBinary\Skylands\ui\forms\skyblock;
 
 
-use BreathTakinglyBinary\Skylands\ui\forms\SimpleForm;
+use BreathTakinglyBinary\libDynamicForms\SimpleForm;
 use pocketmine\Player;
 use BreathTakinglyBinary\Skylands\isle\Isle;
 
@@ -27,7 +27,6 @@ class IslandInformationMenu extends SimpleForm{
         $this->addButton("Exit");
     }
 
-    protected function onSubmit(Player $player, $data){
+    public function onResponse(Player $player, $data) : void{
     }
-
 }

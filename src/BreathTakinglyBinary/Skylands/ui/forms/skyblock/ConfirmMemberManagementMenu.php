@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace BreathTakinglyBinary\Skylands\ui\forms\skyblock;
 
 
-use BreathTakinglyBinary\Skylands\ui\forms\ModalForm;
-use BreathTakinglyBinary\DynamicCore\util\Utils;
+use BreathTakinglyBinary\libDynamicForms\ModalForm;
+use BreathTakinglyBinary\Skylands\utils\SkylandsUtils;
 use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
@@ -23,7 +23,7 @@ class ConfirmMemberManagementMenu extends ModalForm implements MemeberManagement
         $this->action = $action;
         $this->playerToManage = $playerToManage;
 
-        $actionWord = Utils::getMemberManagementActionWord($action);
+        $actionWord = SkylandsUtils::getMemberManagementActionWord($action);
 
         $this->setTitle("Manage Member");
         $content = "You are about to \n";
@@ -35,7 +35,7 @@ class ConfirmMemberManagementMenu extends ModalForm implements MemeberManagement
         $this->setButton2("No");
     }
 
-    protected function onSubmit(Player $player, $data){
+    public function onResponse(Player $player, $data) : void{
         if($data){
             switch($this->action){
                 case self::ACTION_DEMOTE:
@@ -50,5 +50,4 @@ class ConfirmMemberManagementMenu extends ModalForm implements MemeberManagement
             }
         }
     }
-
 }

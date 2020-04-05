@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace BreathTakinglyBinary\Skylands\ui\forms\skyblock;
 
 
-use BreathTakinglyBinary\Skylands\ui\forms\SimpleForm;
-use pocketmine\Player;
+use BreathTakinglyBinary\libDynamicForms\SimpleForm;
 use BreathTakinglyBinary\Skylands\isle\Isle;
 use BreathTakinglyBinary\Skylands\Skylands;
+use pocketmine\Player;
 
 class SkyBlockMainMenu extends SimpleForm{
 
@@ -32,7 +32,7 @@ class SkyBlockMainMenu extends SimpleForm{
         $this->addButton("Island Settings");
     }
 
-    protected function onSubmit(Player $player, $data){
+    public function onResponse(Player $player, $data) : void{
         $skyBlock = Skylands::getInstance();
         switch($data){
             case 0:
@@ -54,7 +54,5 @@ class SkyBlockMainMenu extends SimpleForm{
                 $player->sendForm(new IslandOwnerSettingsMenu());
                 break;
         }
-
     }
-
 }
