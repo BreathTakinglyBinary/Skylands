@@ -14,12 +14,13 @@ class VisitIslandsMenu extends SimpleForm{
     /** @var Isle[] */
     private $isles = [];
 
-    public function __construct(?Player $player = null){
+    public function __construct(Player $player){
         parent::__construct();
         $skyBlock = Skylands::getInstance();
-        $playerIsleId = null;
-        if($player instanceof Player){
-            $playerIsleId = $skyBlock->getSessionManager()->getSession($player)->getIsle()->getIdentifier();
+        $playerIsleId = "";
+        $isle = $skyBlock->getSessionManager()->getSession($player)->getIsle();
+        if($isle instanceof Isle){
+            $playerIsleId = $isle->getIdentifier();
         }
         foreach($skyBlock->getIsleManager()->getIsles() as $isle){
             if(!$isle->isLocked() and $isle->getIdentifier() !== $playerIsleId){
