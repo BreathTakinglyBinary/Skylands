@@ -10,17 +10,17 @@ declare(strict_types=1);
 
 namespace BreathTakinglyBinary\Skylands;
 
-use pocketmine\item\Item;
-use pocketmine\level\Position;
-use pocketmine\plugin\PluginBase;
-use pocketmine\Server;
-use pocketmine\utils\TextFormat;
 use BreathTakinglyBinary\Skylands\command\IsleCommandMap;
 use BreathTakinglyBinary\Skylands\generator\IsleGeneratorManager;
 use BreathTakinglyBinary\Skylands\isle\IsleManager;
 use BreathTakinglyBinary\Skylands\provider\json\JSONProvider;
 use BreathTakinglyBinary\Skylands\provider\Provider;
 use BreathTakinglyBinary\Skylands\session\SessionManager;
+use pocketmine\item\Item;
+use pocketmine\level\Position;
+use pocketmine\plugin\PluginBase;
+use pocketmine\Server;
+use pocketmine\utils\TextFormat;
 
 class Skylands extends PluginBase {
 
@@ -65,17 +65,15 @@ class Skylands extends PluginBase {
         $this->generatorManager = new IsleGeneratorManager($this);
         $this->commandMap = new IsleCommandMap($this);
         $this->eventListener = new SkylandsListener($this);
-        if($this->getServer()->getSpawnRadius() > 0) {
-            $this->getLogger()->warning("Please, disable the spawn protection on your server.properties, otherwise SkyBlock won't work correctly");
+        if($this->getServer()->getSpawnRadius() > -1) {
+            $this->getLogger()->warning("Please, disable the spawn protection on your server.properties, otherwise Skylands won't work correctly");
         }
-        $this->getLogger()->info("SkyBlock was enabled");
     }
 
     public function onDisable(): void {
         foreach($this->isleManager->getIsles() as $isle) {
             $isle->save();
         }
-        $this->getLogger()->info("SkyBlock was disabled");
     }
 
     /**
