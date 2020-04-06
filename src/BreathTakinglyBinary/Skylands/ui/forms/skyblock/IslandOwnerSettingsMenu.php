@@ -5,16 +5,23 @@ namespace BreathTakinglyBinary\Skylands\ui\forms\skyblock;
 
 
 use BreathTakinglyBinary\libDynamicForms\SimpleForm;
-use pocketmine\Player;
+use BreathTakinglyBinary\Skylands\isle\Isle;
 use BreathTakinglyBinary\Skylands\Skylands;
+use pocketmine\Player;
 
 class IslandOwnerSettingsMenu extends SimpleForm{
 
-    public function __construct(){
+    public function __construct(Player $player){
         parent::__construct();
+        $island = Skylands::getInstance()->getSessionManager()->getSession($player)->getIsle();
+        if(!$island instanceof Isle){
+            throw new \RuntimeException("IslandOwnerSettingsMenu being created for player with no island!");
+        }
+        $lockAction = $island->isLocked() ? "Unlock" : "Lock";
+
         $this->setTitle("Island Settings");
 
-        $this->addButton("Lock Island");
+        $this->addButton($lockAction . " Island");
         $this->addButton("Invite a Player");
         $this->addButton("Promote a Member");
         $this->addButton("Demote a Member");
@@ -23,11 +30,15 @@ class IslandOwnerSettingsMenu extends SimpleForm{
     }
 
     public function onResponse(Player $player, $data) : void{
-        $skyBlock = Skylands::getInstance();
+        $island = Skylands::getInstance()->getSessionManager()->getSession($player)->getIsle();
+        if(!$island instanceof Isle){
+            return;
+        }
         switch($data){
             case 0:
-                $skyBlock->getSessionManager()->getSession($player)->getIsle()->setLocked();
-                $player->sendMessage("Your island has been locked!");
+                $island->setLocked(!$island->isLocked());
+                $lockAction = $island->isLocked() ? "Unlocked" : "Locked";
+                $player->sendMessage("Your island has been $lockAction!");
                 break;
             case 1:
                 $player->sendForm(new InviteToIslandMenu());

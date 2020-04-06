@@ -51,7 +51,7 @@ class SkyBlockMainMenu extends SimpleForm{
                 }
                 break;
             case 3:
-                $player->sendForm(new IslandOwnerSettingsMenu());
+                $player->sendForm(new IslandOwnerSettingsMenu($player));
                 break;
         }
     }
