@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace BreathTakinglyBinary\Skylands;
 
+use BreathTakinglyBinary\Skylands\isle\Isle;
 use pocketmine\block\Solid;
 use pocketmine\entity\object\Painting;
 use pocketmine\event\block\BlockBreakEvent;
@@ -17,6 +18,7 @@ use pocketmine\event\block\BlockFormEvent;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\event\entity\EntityLevelChangeEvent;
 use pocketmine\event\level\ChunkLoadEvent;
 use pocketmine\event\level\LevelLoadEvent;
 use pocketmine\event\level\LevelUnloadEvent;
@@ -82,6 +84,25 @@ class SkylandsListener implements Listener {
             foreach($this->plugin->getSettings()->getChestPerGenerator($type) as $item) {
                 $chest->getInventory()->addItem($item);
             }
+        }
+    }
+
+    public function onLevelChange(EntityLevelChangeEvent $event) : void{
+        $player = $event->getEntity();
+        if(!$player instanceof Player){
+            return;
+        }
+
+        $session = $this->getSession($player);
+        if(!$session instanceof Session){
+            return;
+        }
+        $isle = $session->getIsle();
+        if(!$isle instanceof Isle){
+            return;
+        }
+        if($session->getIsle()->getLevel()->getId() === $event->getTarget()->getId()){
+            $player->setGamemode(Player::SURVIVAL);
         }
     }
     
