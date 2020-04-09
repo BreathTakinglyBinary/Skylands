@@ -41,15 +41,7 @@ class InviteCommand extends IsleCommand {
             $session->sendTranslatedMessage("INVITE_USAGE");
             return;
         } elseif(count($session->getIsle()->getMembers()) >= $session->getIsle()->getSlots()) {
-            $isle = $session->getIsle();
-            $next = $isle->getNextCategory();
-            if($next !== null) {
-                $session->sendTranslatedMessage("ISLE_IS_FULL_BUT_YOU_CAN_UPGRADE", [
-                    "next" => $next
-                ]);
-            } else {
-                $session->sendTranslatedMessage("ISLE_IS_FULL");
-            }
+            $session->sendTranslatedMessage("ISLE_IS_FULL");
             return;
         }
         $player = $this->plugin->getServer()->getPlayer($args[0]);

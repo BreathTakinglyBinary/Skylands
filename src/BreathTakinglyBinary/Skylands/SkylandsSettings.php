@@ -21,9 +21,6 @@ class SkylandsSettings {
     /** @var array */
     private $data;
     
-    /** @var string[] */
-    private $slotsBySize = [];
-    
     /** @var Item[] */
     private $defaultChest;
     
@@ -50,14 +47,6 @@ class SkylandsSettings {
     public function __construct(Skylands $plugin) {
         $this->plugin = $plugin;
         $this->refresh();
-    }
-    
-    /**
-     * @param string $size
-     * @return int
-     */
-    public function getSlotsBySize(string $size): int {
-        return $this->slotsBySize[$size] ?? 1;
     }
     
     /**
@@ -120,7 +109,6 @@ class SkylandsSettings {
     public function refresh(): void {
         $this->data = json_decode(file_get_contents($this->plugin->getDataFolder() . "settings.json"), true);
         $this->messages = json_decode(file_get_contents($this->plugin->getDataFolder() . "messages.json"), true);
-        $this->slotsBySize = $this->data["slots-by-size"];
         $this->defaultChest = Skylands::parseItems($this->data["default-chest"]);
         $this->chestPerGenerator = [];
         foreach($this->data["chest-per-generator"] as $world => $items) {

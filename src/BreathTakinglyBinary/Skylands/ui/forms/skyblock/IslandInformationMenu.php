@@ -15,12 +15,9 @@ class IslandInformationMenu extends SimpleForm{
         $this->setTitle("Island Information");
 
         $isMembers = count($island->getMembers());
-        $content = "Blocks: " . $island->getBlocksBuilt() . "\n\n";
-        $content .= $island->isLocked() ? "State: Locked\n\n" : "State: Unlocked\n\n";
+        $content = $island->isLocked() ? "State: Locked\n\n" : "State: Unlocked\n\n";
         $content .= "Members: " . $isMembers . "/" . $island->getSlots() . "\n\n";
         $content .= "Online Members: " . count($island->getMembersOnline()) . "/" . $isMembers . "\n\n";
-        $content .= "Category: " . $island->getCategory() . "\n\n";
-        $content .= "Next Category: " . $island->getNextCategory() . "\n";
 
         $this->setContent($content);
 

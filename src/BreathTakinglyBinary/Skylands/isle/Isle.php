@@ -40,18 +40,6 @@ class Isle {
     /** @var Level */
     private $level;
     
-    /** @var int */
-    private $blocksBuilt;
-    
-    /** @var string */
-    private $category;
-    
-    const CATEGORY_EXTRA_SMALL = "XS";
-    const CATEGORY_SMALL = "S";
-    const CATEGORY_MEDIUM = "M";
-    const CATEGORY_LARGE = "L";
-    const CATEGORY_EXTRA_LARGE = "XL";
-    
     /** @var Session[] */
     private $cooperators = [];
     
@@ -63,24 +51,19 @@ class Isle {
      * @param bool $locked
      * @param string $type
      * @param Level $level
-     * @param int $blocksBuilt
      */
-    public function __construct(IsleManager $manager, string $identifier, array $members, bool $locked, string $type,
-        Level $level, int $blocksBuilt) {
+    public function __construct(IsleManager $manager, string $identifier, array $members, bool $locked, string $type, Level $level) {
         $this->manager = $manager;
         $this->identifier = $identifier;
         $this->locked = $locked;
         $this->type = $type;
         $this->level = $level;
-        $this->blocksBuilt = $blocksBuilt;
     
         foreach($members as $member) {
             if($member instanceof OfflineSession) {
                 $this->addMember($member);
             }
         }
-        
-        $this->updateCategory();
     }
     
     /**
@@ -149,44 +132,9 @@ class Isle {
     /**
      * @return int
      */
-    public function getBlocksBuilt(): int {
-        return $this->blocksBuilt;
-    }
-    
-    /**
-     * @return string
-     */
-    public function getCategory(): string {
-        return $this->category;
-    }
-    
-    /**
-     * @return string|null
-     */
-    public function getNextCategory(): ?string {
-        switch($this->category) {
-            case self::CATEGORY_EXTRA_LARGE:
-                return null;
-                break;
-            case self::CATEGORY_LARGE:
-                return self::CATEGORY_EXTRA_LARGE;
-                break;
-            case self::CATEGORY_MEDIUM:
-                return self::CATEGORY_LARGE;
-                break;
-            case self::CATEGORY_SMALL:
-                return self::CATEGORY_MEDIUM;
-                break;
-            default:
-                return self::CATEGORY_SMALL;
-        }
-    }
-    
-    /**
-     * @return int
-     */
     public function getSlots(): int {
-        return $this->manager->getPlugin()->getSettings()->getSlotsBySize($this->category);
+        // TODO: Make this number variable
+        return 5;
     }
     
     /**
@@ -231,36 +179,6 @@ class Isle {
      */
     public function setSpawnLocation(Vector3 $position): void {
         $this->level->setSpawnLocation($position);
-    }
-    
-    /**
-     * @param int $blocksBuilt
-     */
-    public function setBlocksBuilt(int $blocksBuilt): void {
-        $this->blocksBuilt = max(0, $blocksBuilt);
-        $this->updateCategory();
-    }
-    
-    public function updateCategory(): void {
-        if($this->blocksBuilt >= 500000) {
-            $this->category = self::CATEGORY_EXTRA_LARGE;
-        } elseif($this->blocksBuilt >= 100000) {
-            $this->category = self::CATEGORY_LARGE;
-        } elseif($this->blocksBuilt >= 50000) {
-            $this->category = self::CATEGORY_MEDIUM;
-        } elseif($this->blocksBuilt >= 10000) {
-            $this->category = self::CATEGORY_SMALL;
-        } else {
-            $this->category = self::CATEGORY_EXTRA_SMALL;
-        }
-    }
-    
-    public function addBlock(): void {
-        $this->setBlocksBuilt($this->blocksBuilt + 1);
-    }
-    
-    public function destroyBlock(): void {
-        $this->setBlocksBuilt($this->blocksBuilt - 1);
     }
     
     /**

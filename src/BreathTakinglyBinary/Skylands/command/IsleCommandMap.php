@@ -20,8 +20,6 @@ use pocketmine\command\PluginIdentifiableCommand;
 use pocketmine\Player;
 use pocketmine\plugin\Plugin;
 use BreathTakinglyBinary\Skylands\command\presets\AcceptCommand;
-use BreathTakinglyBinary\Skylands\command\presets\BlocksCommand;
-use BreathTakinglyBinary\Skylands\command\presets\CategoryCommand;
 use BreathTakinglyBinary\Skylands\command\presets\ChatCommand;
 use BreathTakinglyBinary\Skylands\command\presets\CooperateCommand;
 use BreathTakinglyBinary\Skylands\command\presets\CreateCommand;
@@ -75,8 +73,6 @@ class IsleCommandMap extends Command implements PluginIdentifiableCommand {
         $this->registerCommand(new DemoteCommand($this));
         $this->registerCommand(new SetSpawnCommand());
         $this->registerCommand(new TransferCommand($this));
-        $this->registerCommand(new CategoryCommand());
-        $this->registerCommand(new BlocksCommand());
         $this->registerCommand(new CooperateCommand($this));
         parent::__construct("isle", "SkyBlock command", "Usage: /is", [
             "island",

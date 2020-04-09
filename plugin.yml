@@ -5,7 +5,7 @@ authors:
   - 95CivicSi
 website: http://github.com/BreathTakinglyBinary/Skylands
 main: BreathTakinglyBinary\Skylands\Skylands
-version: 2.0.0.0
+version: 2.0.0.1
 api: [3.0.0]
 virions:
   - libDynamicForms

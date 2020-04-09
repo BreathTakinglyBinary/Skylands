@@ -113,13 +113,9 @@ class SkylandsListener implements Listener {
         $player = $event->getPlayer();
         $session = $this->getSession($player);
         $isle = $this->isleManager->getIsle($player->getLevel()->getName());
-        if($isle !== null) {
-            if(!$isle->canInteract($session)) {
-                $session->sendTranslatedPopup("MUST_ME_MEMBER");
-                $event->setCancelled();
-            } elseif(!($event->isCancelled()) and $event->getBlock() instanceof Solid) {
-                $isle->destroyBlock();
-            }
+        if(($isle !== null) && !$isle->canInteract($session)){
+            $session->sendTranslatedPopup("MUST_ME_MEMBER");
+            $event->setCancelled();
         }
     }
     
@@ -130,25 +126,9 @@ class SkylandsListener implements Listener {
         $player = $event->getPlayer();
         $session = $this->getSession($player);
         $isle = $this->isleManager->getIsle($player->getLevel()->getName());
-        if($isle !== null) {
-            if(!$isle->canInteract($session)) {
-                $session->sendTranslatedPopup("MUST_ME_MEMBER");
-                $event->setCancelled();
-            } elseif(!($event->isCancelled()) and $event->getBlock() instanceof Solid) {
-                $isle->addBlock();
-            }
-        }
-    }
-
-    /**
-     * @param BlockFormEvent $event
-     */
-    public function onBlockForm(BlockFormEvent $event): void {
-        $block = $event->getBlock();
-        $newBlock = $event->getNewState();
-        $isle = $this->isleManager->getIsle($block->getLevel()->getName());
-        if($isle !== null and !($block instanceof Solid) and $newBlock instanceof Solid) {
-            $isle->addBlock();
+        if(($isle !== null) && !$isle->canInteract($session)){
+            $session->sendTranslatedPopup("MUST_ME_MEMBER");
+            $event->setCancelled();
         }
     }
     

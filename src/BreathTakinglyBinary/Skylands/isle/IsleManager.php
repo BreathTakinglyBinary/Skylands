@@ -129,11 +129,10 @@ class IsleManager {
      * @param bool $locked
      * @param string $type
      * @param Level $level
-     * @param int $blocksBuilt
      * @throws \ReflectionException
      */
-    public function openIsle(string $identifier, array $members, bool $locked, string $type, Level $level, int $blocksBuilt): void {
-        $this->isles[$identifier] = new Isle($this, $identifier, $members, $locked, $type, $level, $blocksBuilt);
+    public function openIsle(string $identifier, array $members, bool $locked, string $type, Level $level): void {
+        $this->isles[$identifier] = new Isle($this, $identifier, $members, $locked, $type, $level);
         (new IsleOpenEvent($this->isles[$identifier]))->call();
     }
 
