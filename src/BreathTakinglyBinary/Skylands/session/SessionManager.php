@@ -18,27 +18,11 @@ use BreathTakinglyBinary\Skylands\Skylands;
 
 class SessionManager {
     
-    /** @var Skylands */
-    private $plugin;
-    
     /** @var Session[] */
     private $sessions = [];
-    
-    /**
-     * SessionManager constructor.
-     *
-     * @param Skylands $plugin
-     */
-    public function __construct(Skylands $plugin) {
-        $this->plugin = $plugin;
-        $plugin->getServer()->getPluginManager()->registerEvents(new SessionListener($this), $plugin);
-    }
-    
-    /**
-     * @return Skylands
-     */
-    public function getPlugin() : Skylands {
-        return $this->plugin;
+
+    public function __construct() {
+        Skylands::getInstance()->getServer()->getPluginManager()->registerEvents(new SessionListener($this), Skylands::getInstance());
     }
     
     /**

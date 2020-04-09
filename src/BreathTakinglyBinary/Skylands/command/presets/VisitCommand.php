@@ -18,15 +18,11 @@ use BreathTakinglyBinary\Skylands\Skylands;
 
 class VisitCommand extends IsleCommand {
     
-    /** @var Skylands */
-    private $plugin;
-    
     /**
      * VisitCommand constructor.
      * @param IsleCommandMap $map
      */
     public function __construct(IsleCommandMap $map) {
-        $this->plugin = $map->getPlugin();
         parent::__construct(["visit", "teleport", "tp"], "VISIT_USAGE", "VISIT_DESCRIPTION");
     }
 
@@ -40,7 +36,7 @@ class VisitCommand extends IsleCommand {
             $session->sendTranslatedMessage("VISIT_USAGE");
             return;
         }
-        $offline = $this->plugin->getSessionManager()->getOfflineSession($args[0]);
+        $offline = Skylands::getInstance()->getSessionManager()->getOfflineSession($args[0]);
         $isleId = $offline->getIsleId();
         if($isleId === null) {
             $session->sendTranslatedMessage("HE_DO_NOT_HAVE_AN_ISLE", [
@@ -48,8 +44,8 @@ class VisitCommand extends IsleCommand {
             ]);
             return;
         }
-        $this->plugin->getProvider()->loadIsle($isleId);
-        $isle = $this->plugin->getIsleManager()->getIsle($isleId);
+        Skylands::getInstance()->getProvider()->loadIsle($isleId);
+        $isle = Skylands::getInstance()->getIsleManager()->getIsle($isleId);
         if($isle->isLocked() and !($session->getPlayer()->isOp())) {
             $session->sendTranslatedMessage("HIS_ISLE_IS_LOCKED", [
                 "name" => $args[0]

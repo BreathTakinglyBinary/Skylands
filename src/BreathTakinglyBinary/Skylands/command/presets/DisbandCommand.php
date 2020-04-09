@@ -15,6 +15,7 @@ use BreathTakinglyBinary\Skylands\command\IsleCommand;
 use BreathTakinglyBinary\Skylands\command\IsleCommandMap;
 use BreathTakinglyBinary\Skylands\isle\IsleManager;
 use BreathTakinglyBinary\Skylands\session\Session;
+use BreathTakinglyBinary\Skylands\Skylands;
 
 class DisbandCommand extends IsleCommand {
     
@@ -26,7 +27,7 @@ class DisbandCommand extends IsleCommand {
      * @param IsleCommandMap $map
      */
     public function __construct(IsleCommandMap $map) {
-        $this->isleManager = $map->getPlugin()->getIsleManager();
+        $this->isleManager = Skylands::getInstance()->getIsleManager();
         parent::__construct(["disband"], "DISBAND_USAGE", "DISBAND_DESCRIPTION");
     }
 

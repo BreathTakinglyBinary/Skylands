@@ -18,15 +18,11 @@ use BreathTakinglyBinary\Skylands\Skylands;
 
 class CooperateCommand extends IsleCommand {
     
-    /** @var Skylands */
-    private $plugin;
-    
     /**
      * CooperateCommand constructor.
      * @param IsleCommandMap $map
      */
     public function __construct(IsleCommandMap $map) {
-        $this->plugin = $map->getPlugin();
         parent::__construct(["cooperate"], "COOPERATE_USAGE", "COOPERATE_DESCRIPTION");
     }
     
@@ -41,14 +37,14 @@ class CooperateCommand extends IsleCommand {
             $session->sendTranslatedMessage("COOPERATE_USAGE");
             return;
         }
-        $player = $this->plugin->getServer()->getPlayer($args[0]);
+        $player = Skylands::getInstance()->getServer()->getPlayer($args[0]);
         if($player === null) {
             $session->sendTranslatedMessage("NOT_ONLINE_PLAYER", [
                 "name" => $args[0]
             ]);
             return;
         }
-        $playerSession = $this->plugin->getSessionManager()->getSession($player);
+        $playerSession = Skylands::getInstance()->getSessionManager()->getSession($player);
         $playerName = $playerSession->getPlayer()->getName();
         $sessionName = $session->getPlayer()->getName();
         $isle = $session->getIsle();

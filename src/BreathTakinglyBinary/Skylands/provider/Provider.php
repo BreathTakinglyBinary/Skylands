@@ -16,17 +16,8 @@ use BreathTakinglyBinary\Skylands\session\BaseSession;
 use BreathTakinglyBinary\Skylands\Skylands;
 
 abstract class Provider {
-    
-    /** @var Skylands */
-    protected $plugin;
-    
-    /**
-     * Provider constructor.
-     *
-     * @param Skylands $plugin
-     */
-    public function __construct(Skylands $plugin) {
-        $this->plugin = $plugin;
+
+    public function __construct() {
         $this->initialize();
     }
     

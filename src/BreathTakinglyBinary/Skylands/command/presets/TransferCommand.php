@@ -19,15 +19,11 @@ use BreathTakinglyBinary\Skylands\Skylands;
 
 class TransferCommand extends IsleCommand {
     
-    /** @var Skylands */
-    private $plugin;
-    
     /**
      * TransferCommand constructor.
      * @param IsleCommandMap $map
      */
     public function __construct(IsleCommandMap $map) {
-        $this->plugin = $map->getPlugin();
         parent::__construct(["transfer", "makeleader"], "TRANSFER_USAGE", "TRANSFER_DESCRIPTION");
     }
     
@@ -42,14 +38,14 @@ class TransferCommand extends IsleCommand {
             $session->sendTranslatedMessage("TRANSFER_USAGE");
             return;
         }
-        $player = $this->plugin->getServer()->getPlayer($args[0]);
+        $player = Skylands::getInstance()->getServer()->getPlayer($args[0]);
         if($player === null) {
             $session->sendTranslatedMessage("NOT_ONLINE_PLAYER", [
                 "name" => $args[0]
             ]);
             return;
         }
-        $playerSession = $this->plugin->getSessionManager()->getSession($player);
+        $playerSession = Skylands::getInstance()->getSessionManager()->getSession($player);
         if($this->checkClone($session, $playerSession)) {
             return;
         } elseif($playerSession->getIsle() !== $session->getIsle()) {

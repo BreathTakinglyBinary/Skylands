@@ -19,9 +19,6 @@ use BreathTakinglyBinary\Skylands\Skylands;
 
 class IsleGeneratorManager {
 
-    /** @var Skylands */
-    private $plugin;
-
     /** @var string[] */
     private $generators = [
         "basic" => BasicIsland::class,
@@ -29,14 +26,8 @@ class IsleGeneratorManager {
         "shelly" => ShellyGenerator::class,
         "palm" => PalmIsland::class
     ];
-    
-    /**
-     * GeneratorManager constructor.
-     *
-     * @param Skylands $plugin
-     */
-    public function __construct(Skylands $plugin) {
-        $this->plugin = $plugin;
+
+    public function __construct() {
         foreach($this->generators as $name => $class) {
             GManager::addGenerator($class, $name);
         }
@@ -74,7 +65,7 @@ class IsleGeneratorManager {
     public function registerGenerator(string $name, string $class): void {
         GManager::addGenerator($class, $name);
         if(isset($this->generators[$name])) {
-            $this->plugin->getLogger()->debug("Overwriting generator: $name");
+            Skylands::getInstance()->getLogger()->debug("Overwriting generator: $name");
         }
         $this->generators[$name] = $class;
     }

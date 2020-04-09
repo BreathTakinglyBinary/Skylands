@@ -42,19 +42,10 @@ use BreathTakinglyBinary\Skylands\Skylands;
 
 class IsleCommandMap extends Command implements PluginIdentifiableCommand {
     
-    /** @var Skylands */
-    private $plugin;
-    
     /** @var IsleCommand[] */
     private $commands = [];
-    
-    /**
-     * IsleCommandMap constructor.
-     *
-     * @param Skylands $plugin
-     */
-    public function __construct(Skylands $plugin) {
-        $this->plugin = $plugin;
+
+    public function __construct() {
         $this->registerCommand(new HelpCommand($this));
         $this->registerCommand(new CreateCommand($this));
         $this->registerCommand(new JoinCommand());
@@ -81,14 +72,14 @@ class IsleCommandMap extends Command implements PluginIdentifiableCommand {
             "sb",
             "skyblock"
         ]);
-        $plugin->getServer()->getCommandMap()->register("skyblock", $this);
+        Skylands::getInstance()->getServer()->getCommandMap()->register("skyblock", $this);
     }
     
     /**
      * @return Skylands|Plugin
      */
     public function getPlugin(): Plugin {
-        return $this->plugin;
+        return Skylands::getInstance();
     }
     
     /**
@@ -129,11 +120,11 @@ class IsleCommandMap extends Command implements PluginIdentifiableCommand {
             return;
         }
         
-        $session = $this->plugin->getSessionManager()->getSession($sender);
+        $session = Skylands::getInstance()->getSessionManager()->getSession($sender);
         if(isset($args[0]) and $this->getCommand($args[0]) !== null) {
             $this->getCommand(array_shift($args))->onCommand($session, $args);
         } else {
-            if($this->plugin->getSessionManager()->getSession($sender)->getIsle() instanceof Isle){
+            if(Skylands::getInstance()->getSessionManager()->getSession($sender)->getIsle() instanceof Isle){
                 $sender->sendForm(new SkyBlockMainMenu());
                 return;
             }

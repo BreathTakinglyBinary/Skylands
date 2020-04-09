@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace BreathTakinglyBinary\Skylands\isle;
 
 
+use BreathTakinglyBinary\Skylands\Skylands;
 use pocketmine\level\Level;
 use pocketmine\level\Position;
 use pocketmine\math\Vector3;
@@ -269,7 +270,7 @@ class Isle {
     }
     
     public function save(): void {
-        $this->manager->getPlugin()->getProvider()->saveIsle($this);
+        Skylands::getInstance()->getProvider()->saveIsle($this);
     }
     
     public function updateMembers(): void {

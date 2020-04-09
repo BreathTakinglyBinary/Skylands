@@ -18,15 +18,11 @@ use BreathTakinglyBinary\Skylands\Skylands;
 
 class FireCommand extends IsleCommand {
     
-    /** @var Skylands */
-    private $plugin;
-    
     /**
      * FireCommand constructor.
      * @param IsleCommandMap $map
      */
     public function __construct(IsleCommandMap $map) {
-        $this->plugin = $map->getPlugin();
         parent::__construct(["fire"], "FIRE_USAGE", "FIRE_DESCRIPTION");
     }
     
@@ -41,7 +37,7 @@ class FireCommand extends IsleCommand {
             $session->sendTranslatedMessage("FIRE_USAGE");
             return;
         }
-        $offlineSession = $this->plugin->getSessionManager()->getOfflineSession($args[0]);
+        $offlineSession = Skylands::getInstance()->getSessionManager()->getOfflineSession($args[0]);
         if($this->checkClone($session, $offlineSession->getSession())) {
             return;
         } elseif($offlineSession->getIsleId() !== $session->getIsleId()) {
@@ -54,7 +50,7 @@ class FireCommand extends IsleCommand {
             $onlineSession = $offlineSession->getSession();
             if($onlineSession !== null) {
                 if($onlineSession->getIsle()->getLevel() === $onlineSession->getPlayer()->getLevel()) {
-                    $onlineSession->getPlayer()->teleport($this->plugin->getServer()->getDefaultLevel()->getSpawnLocation());
+                    $onlineSession->getPlayer()->teleport(Skylands::getInstance()->getServer()->getDefaultLevel()->getSpawnLocation());
                 }
                 $onlineSession->setRank(Session::RANK_DEFAULT);
                 $onlineSession->setIsle(null);

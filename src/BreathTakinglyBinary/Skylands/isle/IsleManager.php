@@ -23,27 +23,8 @@ use pocketmine\level\Level;
 
 class IsleManager {
 
-    /** @var Skylands */
-    private $plugin;
-
     /** @var Isle[] */
     private $isles = [];
-
-    /**
-     * IsleManager constructor.
-     *
-     * @param Skylands $plugin
-     */
-    public function __construct(Skylands $plugin) {
-        $this->plugin = $plugin;
-    }
-
-    /**
-     * @return Skylands
-     */
-    public function getPlugin() : Skylands {
-        return $this->plugin;
-    }
 
     /**
      * @return Isle[]
@@ -68,21 +49,21 @@ class IsleManager {
     public function createIsleFor(Session $session, string $type): void {
         $identifier = Skylands::generateUniqueId();
 
-        $generatorManager = $this->plugin->getGeneratorManager();
+        $generatorManager = Skylands::getInstance()->getGeneratorManager();
         if($generatorManager->isGenerator($type)) {
             $generator = $generatorManager->getGenerator($type);
         } else {
             $generator = $generatorManager->getGenerator("Basic");
         }
 
-        $server = $this->plugin->getServer();
+        $server = Skylands::getInstance()->getServer();
         $server->generateLevel($identifier, null, $generator);
         $server->loadLevel($identifier);
         $level = $server->getLevelByName($identifier);
         /** @var IsleGenerator $generator */
         $level->setSpawnLocation($generator::getWorldSpawn());
 
-        $this->openIsle($identifier, [$session->getOffline()], true, $type, $level, 0);
+        $this->openIsle($identifier, [$session->getOffline()], true, $type, $level);
         $session->setIsle($isle = $this->isles[$identifier]);
         $session->setRank(BaseSession::RANK_FOUNDER);
         $session->save();
@@ -118,8 +99,8 @@ class IsleManager {
         $isle->save();
         $this->closeIsle($isle);
         if($event->removeData){
-            $this->plugin->getProvider()->deleteIsleData($isle->getIdentifier());
-            Skylands::recursiveRemoveDirectory($this->plugin->getServer()->getDataPath() . "worlds/" . $isle->getLevel()->getFolderName());
+            Skylands::getInstance()->getProvider()->deleteIsleData($isle->getIdentifier());
+            Skylands::recursiveRemoveDirectory(Skylands::getInstance()->getServer()->getDataPath() . "worlds/" . $isle->getLevel()->getFolderName());
         }
     }
 
@@ -142,7 +123,7 @@ class IsleManager {
      */
     public function closeIsle(Isle $isle): void {
         $isle->save();
-        $server = $this->plugin->getServer();
+        $server = Skylands::getInstance()->getServer();
         (new IsleCloseEvent($isle))->call();
         $server->unloadLevel($isle->getLevel());
         unset($this->isles[$isle->getIdentifier()]);

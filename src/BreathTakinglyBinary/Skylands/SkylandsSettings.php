@@ -15,9 +15,6 @@ use pocketmine\item\Item;
 
 class SkylandsSettings {
     
-    /** @var Skylands */
-    private $plugin;
-    
     /** @var array */
     private $data;
     
@@ -41,11 +38,8 @@ class SkylandsSettings {
     
     /**
      * SkyBlockSettings constructor.
-     *
-     * @param Skylands $plugin
      */
-    public function __construct(Skylands $plugin) {
-        $this->plugin = $plugin;
+    public function __construct() {
         $this->refresh();
     }
     
@@ -107,8 +101,8 @@ class SkylandsSettings {
     }
 
     public function refresh(): void {
-        $this->data = json_decode(file_get_contents($this->plugin->getDataFolder() . "settings.json"), true);
-        $this->messages = json_decode(file_get_contents($this->plugin->getDataFolder() . "messages.json"), true);
+        $this->data = json_decode(file_get_contents(Skylands::getInstance()->getDataFolder() . "settings.json"), true);
+        $this->messages = json_decode(file_get_contents(Skylands::getInstance()->getDataFolder() . "messages.json"), true);
         $this->defaultChest = Skylands::parseItems($this->data["default-chest"]);
         $this->chestPerGenerator = [];
         foreach($this->data["chest-per-generator"] as $world => $items) {

@@ -36,9 +36,6 @@ use BreathTakinglyBinary\Skylands\session\Session;
 use BreathTakinglyBinary\Skylands\session\SessionManager;
 
 class SkylandsListener implements Listener {
-
-    /** @var Skylands */
-    private $plugin;
     
     /** @var SessionManager */
     private $sessionManager;
@@ -47,15 +44,14 @@ class SkylandsListener implements Listener {
     private $isleManager;
 
     /**
-     * SkyBlockListener constructor.
+     * SkylandsListener constructor.
      *
-     * @param Skylands $plugin
+     * @param SessionManager $sessionManager
+     * @param IsleManager    $isleManager
      */
-    public function __construct(Skylands $plugin) {
-        $this->plugin = $plugin;
-        $this->sessionManager = $plugin->getSessionManager();
-        $this->isleManager = $plugin->getIsleManager();
-        $plugin->getServer()->getPluginManager()->registerEvents($this, $plugin);
+    public function __construct(SessionManager $sessionManager, IsleManager $isleManager) {
+        $this->sessionManager = $sessionManager;
+        $this->isleManager = $isleManager;
     }
 
     /**
@@ -63,7 +59,7 @@ class SkylandsListener implements Listener {
      * @return Session|null
      */
     public function getSession(Player $player): ?Session {
-        return $this->plugin->getSessionManager()->getSession($player);
+        return $this->sessionManager->getSession($player);
     }
     
     /**
@@ -71,17 +67,17 @@ class SkylandsListener implements Listener {
      */
     public function onChunkLoad(ChunkLoadEvent $event): void {
         $level = $event->getLevel();
-        $isle = $this->plugin->getIsleManager()->getIsle($level->getName());
+        $isle = Skylands::getInstance()->getIsleManager()->getIsle($level->getName());
         if($isle === null) {
             return;
         }
-        $generator = $this->plugin->getGeneratorManager()->getGenerator($type = $isle->getType());
+        $generator = Skylands::getInstance()->getGeneratorManager()->getGenerator($type = $isle->getType());
         /** @var IsleGenerator $generator */
         $position = $generator::getChestPosition();
         if($level->getChunk($position->x >> 4, $position->z >> 4) === $event->getChunk() and $event->isNewChunk()) {
             /** @var Chest $chest */
             $chest = Tile::createTile(Tile::CHEST, $level, Chest::createNBT($position));
-            foreach($this->plugin->getSettings()->getChestPerGenerator($type) as $item) {
+            foreach(Skylands::getInstance()->getSettings()->getChestPerGenerator($type) as $item) {
                 $chest->getInventory()->addItem($item);
             }
         }
@@ -138,7 +134,7 @@ class SkylandsListener implements Listener {
     public function onInteract(PlayerInteractEvent $event): void {
         $player = $event->getPlayer();
         $session = $this->getSession($player);
-        $isle = $this->plugin->getIsleManager()->getIsle($player->getLevel()->getName());
+        $isle = $this->isleManager->getIsle($player->getLevel()->getName());
         if($isle !== null and !($isle->canInteract($session))) {
             $session->sendTranslatedPopup("MUST_ME_MEMBER");
             $event->setCancelled();
@@ -149,13 +145,13 @@ class SkylandsListener implements Listener {
      * @param PlayerChatEvent $event
      */
     public function onChat(PlayerChatEvent $event): void {
-        $sessionManager = $this->plugin->getSessionManager();
-        $session = $sessionManager->getSession($event->getPlayer());
+
+        $session = $this->getSession($event->getPlayer());
         if(!($session->hasIsle()) or !($session->isInChat())) {
             return;
         }
         $recipients = [];
-        foreach($sessionManager->getSessions() as $userSession) {
+        foreach($this->sessionManager->getSessions() as $userSession) {
             if($userSession->isInChat() and $userSession->getIsle() === $session->getIsle()) {
                 $recipients[] = $userSession->getPlayer();
             }
@@ -189,7 +185,7 @@ class SkylandsListener implements Listener {
                 $event->setCancelled();
             }
         } elseif($event->getCause() === EntityDamageEvent::CAUSE_VOID
-            and $this->plugin->getSettings()->isPreventVoidDamage()) {
+            and Skylands::getInstance()->getSettings()->isPreventVoidDamage()) {
             $entity->teleport($isle->getSpawnLocation());
             $event->setCancelled();
         }
@@ -201,7 +197,7 @@ class SkylandsListener implements Listener {
      */
     public function onUnloadLevel(LevelUnloadEvent $event): void {
         foreach($event->getLevel()->getPlayers() as $player) {
-            $player->teleport($this->plugin->getServer()->getDefaultLevel()->getSafeSpawn());
+            $player->teleport(Skylands::getInstance()->getServer()->getDefaultLevel()->getSafeSpawn());
         }
     }
 
@@ -213,7 +209,7 @@ class SkylandsListener implements Listener {
         $player = $event->getPlayer();
         if($this->isleManager->getIsle($player->getLevel()->getName()) !== null and
             $message{0} === "/" and
-            in_array(strtolower(substr($message, 1)), $this->plugin->getSettings()->getIsleBlockedCommands())
+            in_array(strtolower(substr($message, 1)), Skylands::getInstance()->getSettings()->getIsleBlockedCommands())
         ) {
             $this->getSession($player)->sendTranslatedMessage("BLOCKED_COMMAND");
             $event->setCancelled();
@@ -228,7 +224,7 @@ class SkylandsListener implements Listener {
         $player = $event->getPlayer();
         $session = $this->getSession($player);
         if($session === null) return;
-        $isleManager = $this->plugin->getIsleManager();
+        $isleManager = Skylands::getInstance()->getIsleManager();
         foreach($isleManager->getIsles() as $isle) {
             if($isle->isCooperator($session)) {
                 $isle->removeCooperator($session);
@@ -238,7 +234,7 @@ class SkylandsListener implements Listener {
         if($isle !== null) {
             if(empty($isle->getMembersOnline())){
                 foreach($isle->getLevel()->getPlayers() as $nonMember){
-                    $nonMember->teleport($this->plugin->getServer()->getDefaultLevel()->getSafeSpawn());
+                    $nonMember->teleport(Skylands::getInstance()->getServer()->getDefaultLevel()->getSafeSpawn());
                     $this->getSession($nonMember)->sendTranslatedMessage("ISLE_CLOSING");
                 }
                 $isle->tryToClose();
@@ -247,7 +243,7 @@ class SkylandsListener implements Listener {
     }
 
     public function onLevelLoad(LevelLoadEvent $event): void {
-        $this->plugin->getProvider()->loadIsle($event->getLevel()->getFolderName());
+        Skylands::getInstance()->getProvider()->loadIsle($event->getLevel()->getFolderName());
     }
 
 }

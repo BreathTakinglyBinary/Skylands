@@ -18,15 +18,11 @@ use BreathTakinglyBinary\Skylands\Skylands;
 
 class PromoteCommand extends IsleCommand {
     
-    /** @var Skylands */
-    private $plugin;
-    
     /**
      * PromoteCommand constructor.
      * @param IsleCommandMap $map
      */
     public function __construct(IsleCommandMap $map) {
-        $this->plugin = $map->getPlugin();
         parent::__construct(["promote"], "PROMOTE_USAGE", "PROMOTE_DESCRIPTION");
     }
     
@@ -42,7 +38,7 @@ class PromoteCommand extends IsleCommand {
             return;
         }
     
-        $offlineSession = $this->plugin->getSessionManager()->getOfflineSession($args[0]);
+        $offlineSession = Skylands::getInstance()->getSessionManager()->getOfflineSession($args[0]);
         if($this->checkClone($session, $offlineSession->getSession())) {
             return;
         } elseif($offlineSession->getIsleId() !== $session->getIsleId()) {

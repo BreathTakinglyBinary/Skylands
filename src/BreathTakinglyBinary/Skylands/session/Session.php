@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace BreathTakinglyBinary\Skylands\session;
 
 
+use BreathTakinglyBinary\Skylands\Skylands;
 use pocketmine\Player;
 use BreathTakinglyBinary\Skylands\isle\Isle;
 
@@ -102,7 +103,7 @@ class Session extends BaseSession {
         parent::setIsleId($isleId);
         if($isleId !== null) {
             $this->provider->loadIsle($isleId);
-            $this->isle = $this->manager->getPlugin()->getIsleManager()->getIsle($isleId);
+            $this->isle = Skylands::getInstance()->getIsleManager()->getIsle($isleId);
         }
     }
     
@@ -160,7 +161,7 @@ class Session extends BaseSession {
      * @return string
      */
     public function translate(string $identifier, array $args = []): string {
-        return $this->manager->getPlugin()->getSettings()->getMessage($identifier, $args);
+        return Skylands::getInstance()->getSettings()->getMessage($identifier, $args);
     }
     
     /**

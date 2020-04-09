@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace BreathTakinglyBinary\Skylands\provider\json;
 
 
+use BreathTakinglyBinary\Skylands\Skylands;
 use pocketmine\level\LevelException;
 use pocketmine\utils\Config;
 use BreathTakinglyBinary\Skylands\isle\Isle;
@@ -21,7 +22,7 @@ use BreathTakinglyBinary\Skylands\session\Session;
 class JSONProvider extends Provider {
     
     public function initialize(): void {
-        $dataFolder = $this->plugin->getDataFolder();
+        $dataFolder = Skylands::getInstance()->getDataFolder();
         if(!is_dir($dataFolder . "isles")) {
             mkdir($dataFolder . "isles");
         }
@@ -35,7 +36,7 @@ class JSONProvider extends Provider {
      * @return Config
      */
     private function getUserConfig(string $username): Config {
-        return new Config($this->plugin->getDataFolder() . "users/$username.json", Config::JSON, [
+        return new Config(Skylands::getInstance()->getDataFolder() . "users/$username.json", Config::JSON, [
                 "isle" => null,
                 "rank" => Session::RANK_DEFAULT
             ]);
@@ -47,7 +48,7 @@ class JSONProvider extends Provider {
      * @return string
      */
     private function getConfigPath(string $isleId): string{
-        return $this->plugin->getDataFolder() . "isles/$isleId.json";
+        return Skylands::getInstance()->getDataFolder() . "isles/$isleId.json";
     }
     
     /**
@@ -90,30 +91,30 @@ class JSONProvider extends Provider {
      * @return bool
      */
     public function loadIsle(string $identifier): bool {
-        if($this->plugin->getIsleManager()->getIsle($identifier) !== null) {
+        if(Skylands::getInstance()->getIsleManager()->getIsle($identifier) !== null) {
             return true;
         }
         $config = $this->getIsleConfig($identifier);
         if($config === null){
             return false;
         }
-        $server = $this->plugin->getServer();
+        $server = Skylands::getInstance()->getServer();
         if(!$server->isLevelLoaded($identifier)) {
             try{
                 $server->loadLevel($identifier);
             } catch(LevelException $exception){
-                $this->plugin->getLogger()->error("Failed to load level $identifier, which appears to have a valid configuration file.");
-                $this->plugin->getLogger()->error($exception->getMessage());
+                Skylands::getInstance()->getLogger()->error("Failed to load level $identifier, which appears to have a valid configuration file.");
+                Skylands::getInstance()->getLogger()->error($exception->getMessage());
                 return false;
             }
         }
         
         $members = [];
         foreach($config->get("members", []) as $username) {
-            $members[] = $this->plugin->getSessionManager()->getOfflineSession($username);
+            $members[] = Skylands::getInstance()->getSessionManager()->getOfflineSession($username);
         }
         
-        $this->plugin->getIsleManager()->openIsle(
+        Skylands::getInstance()->getIsleManager()->openIsle(
             $identifier,
             $members,
             $config->get("locked"),

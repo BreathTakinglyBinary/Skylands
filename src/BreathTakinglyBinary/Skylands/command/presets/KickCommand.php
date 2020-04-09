@@ -18,15 +18,11 @@ use BreathTakinglyBinary\Skylands\Skylands;
 
 class KickCommand extends IsleCommand {
     
-    /** @var Skylands */
-    private $plugin;
-    
     /**
      * KickCommand constructor.
      * @param IsleCommandMap $map
      */
     public function __construct(IsleCommandMap $map) {
-        $this->plugin = $map->getPlugin();
         parent::__construct(["kick"], "KICK_USAGE", "KICK_DESCRIPTION");
     }
     
@@ -41,7 +37,7 @@ class KickCommand extends IsleCommand {
             $session->sendTranslatedMessage("KICK_USAGE");
             return;
         }
-        $server = $this->plugin->getServer();
+        $server = Skylands::getInstance()->getServer();
         $player = $server->getPlayer($args[0]);
         if($player === null) {
             $session->sendTranslatedMessage("NOT_ONLINE_PLAYER", [
@@ -49,7 +45,7 @@ class KickCommand extends IsleCommand {
             ]);
             return;
         }
-        $playerSession = $this->plugin->getSessionManager()->getSession($player);
+        $playerSession = Skylands::getInstance()->getSessionManager()->getSession($player);
         if($this->checkClone($session, $playerSession)) {
             return;
         } elseif($playerSession->getIsle() === $session->getIsle()) {

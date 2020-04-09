@@ -11,13 +11,15 @@ declare(strict_types=1);
 namespace BreathTakinglyBinary\Skylands\session;
 
 
+use BreathTakinglyBinary\Skylands\Skylands;
+
 class OfflineSession extends BaseSession {
     
     /**
      * @return null|Session
      */
     public function getSession(): ?Session {
-        $player = $this->manager->getPlugin()->getServer()->getPlayerExact($this->username);
+        $player = Skylands::getInstance()->getServer()->getPlayerExact($this->username);
         if($player !== null) {
             return $this->manager->getSession($player);
         }

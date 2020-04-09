@@ -50,7 +50,7 @@ abstract class BaseSession {
     public function __construct(SessionManager $manager, string $username) {
         $this->manager = $manager;
         $this->username = $username;
-        $this->provider = $manager->getPlugin()->getProvider();
+        $this->provider = Skylands::getInstance()->getProvider();
         $this->provider->loadSession($this);
     }
     

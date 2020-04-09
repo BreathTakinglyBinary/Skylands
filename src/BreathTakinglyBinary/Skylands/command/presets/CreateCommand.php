@@ -18,15 +18,11 @@ use BreathTakinglyBinary\Skylands\Skylands;
 
 class CreateCommand extends IsleCommand {
     
-    /** @var Skylands */
-    private $plugin;
-    
     /**
      * CreateCommand constructor.
      * @param IsleCommandMap $map
      */
     public function __construct(IsleCommandMap $map) {
-        $this->plugin = $map->getPlugin();
         parent::__construct(["create"], "CREATE_USAGE", "CREATE_DESCRIPTION");
     }
 
@@ -47,8 +43,8 @@ class CreateCommand extends IsleCommand {
             return;
         }
         $generator = $args[0] ?? "Shelly";
-        if($this->plugin->getGeneratorManager()->isGenerator($generator)) {
-            $this->plugin->getIsleManager()->createIsleFor($session, $generator);
+        if(Skylands::getInstance()->getGeneratorManager()->isGenerator($generator)) {
+            Skylands::getInstance()->getIsleManager()->createIsleFor($session, $generator);
             $session->sendTranslatedMessage("SUCCESSFULLY_CREATED_A_ISLE");
         } else {
             $session->sendTranslatedMessage("NOT_VALID_GENERATOR", [

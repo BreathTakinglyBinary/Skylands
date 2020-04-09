@@ -18,15 +18,11 @@ use BreathTakinglyBinary\Skylands\Skylands;
 
 class DemoteCommand extends IsleCommand {
     
-    /** @var Skylands */
-    private $plugin;
-    
     /**
      * DemoteCommand constructor.
      * @param IsleCommandMap $map
      */
     public function __construct(IsleCommandMap $map) {
-        $this->plugin = $map->getPlugin();
         parent::__construct(["demote"], "DEMOTE_USAGE", "DEMOTE_DESCRIPTION");
     }
     
@@ -42,7 +38,7 @@ class DemoteCommand extends IsleCommand {
             return;
         }
         
-        $offlineSession = $this->plugin->getSessionManager()->getOfflineSession($args[0]);
+        $offlineSession = Skylands::getInstance()->getSessionManager()->getOfflineSession($args[0]);
         if($this->checkClone($session, $offlineSession->getSession())) {
             return;
         } elseif($offlineSession->getIsleId() !== $session->getIsleId()) {

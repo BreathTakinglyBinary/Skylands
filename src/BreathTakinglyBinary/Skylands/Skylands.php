@@ -58,13 +58,13 @@ class Skylands extends PluginBase {
     }
 
     public function onEnable(): void {
-        $this->settings = new SkylandsSettings($this);
-        $this->provider = new JSONProvider($this);
-        $this->sessionManager = new SessionManager($this);
-        $this->isleManager = new IsleManager($this);
-        $this->generatorManager = new IsleGeneratorManager($this);
-        $this->commandMap = new IsleCommandMap($this);
-        $this->eventListener = new SkylandsListener($this);
+        $this->settings = new SkylandsSettings();
+        $this->provider = new JSONProvider();
+        $this->sessionManager = new SessionManager();
+        $this->isleManager = new IsleManager();
+        $this->generatorManager = new IsleGeneratorManager();
+        $this->commandMap = new IsleCommandMap();
+        $this->eventListener = new SkylandsListener();
         if($this->getServer()->getSpawnRadius() > -1) {
             $this->getLogger()->warning("Please, disable the spawn protection on your server.properties, otherwise Skylands won't work correctly");
         }
