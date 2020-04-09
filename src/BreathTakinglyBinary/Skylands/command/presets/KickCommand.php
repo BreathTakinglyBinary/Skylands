@@ -17,12 +17,8 @@ use BreathTakinglyBinary\Skylands\session\Session;
 use BreathTakinglyBinary\Skylands\Skylands;
 
 class KickCommand extends IsleCommand {
-    
-    /**
-     * KickCommand constructor.
-     * @param IsleCommandMap $map
-     */
-    public function __construct(IsleCommandMap $map) {
+
+    public function __construct() {
         parent::__construct(["kick"], "KICK_USAGE", "KICK_DESCRIPTION");
     }
     

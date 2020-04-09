@@ -21,12 +21,8 @@ class DisbandCommand extends IsleCommand {
     
     /** @var IsleManager */
     private $isleManager;
-    
-    /**
-     * DisbandCommand constructor.
-     * @param IsleCommandMap $map
-     */
-    public function __construct(IsleCommandMap $map) {
+
+    public function __construct() {
         $this->isleManager = Skylands::getInstance()->getIsleManager();
         parent::__construct(["disband"], "DISBAND_USAGE", "DISBAND_DESCRIPTION");
     }

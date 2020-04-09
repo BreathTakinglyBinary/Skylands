@@ -17,12 +17,8 @@ use BreathTakinglyBinary\Skylands\session\Session;
 use BreathTakinglyBinary\Skylands\Skylands;
 
 class FireCommand extends IsleCommand {
-    
-    /**
-     * FireCommand constructor.
-     * @param IsleCommandMap $map
-     */
-    public function __construct(IsleCommandMap $map) {
+
+    public function __construct() {
         parent::__construct(["fire"], "FIRE_USAGE", "FIRE_DESCRIPTION");
     }
     

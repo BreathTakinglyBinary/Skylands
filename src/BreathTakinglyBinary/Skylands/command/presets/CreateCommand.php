@@ -17,12 +17,8 @@ use BreathTakinglyBinary\Skylands\session\Session;
 use BreathTakinglyBinary\Skylands\Skylands;
 
 class CreateCommand extends IsleCommand {
-    
-    /**
-     * CreateCommand constructor.
-     * @param IsleCommandMap $map
-     */
-    public function __construct(IsleCommandMap $map) {
+
+    public function __construct() {
         parent::__construct(["create"], "CREATE_USAGE", "CREATE_DESCRIPTION");
     }
 

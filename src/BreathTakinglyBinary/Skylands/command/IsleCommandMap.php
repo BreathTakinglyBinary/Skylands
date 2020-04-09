@@ -47,24 +47,24 @@ class IsleCommandMap extends Command implements PluginIdentifiableCommand {
 
     public function __construct() {
         $this->registerCommand(new HelpCommand($this));
-        $this->registerCommand(new CreateCommand($this));
+        $this->registerCommand(new CreateCommand());
         $this->registerCommand(new JoinCommand());
         $this->registerCommand(new LockCommand());
         $this->registerCommand(new ChatCommand());
-        $this->registerCommand(new VisitCommand($this));
+        $this->registerCommand(new VisitCommand());
         $this->registerCommand(new LeaveCommand());
         $this->registerCommand(new MembersCommand());
-        $this->registerCommand(new InviteCommand($this));
+        $this->registerCommand(new InviteCommand());
         $this->registerCommand(new AcceptCommand());
         $this->registerCommand(new DenyCommand());
-        $this->registerCommand(new DisbandCommand($this));
-        $this->registerCommand(new KickCommand($this));
-        $this->registerCommand(new FireCommand($this));
-        $this->registerCommand(new PromoteCommand($this));
-        $this->registerCommand(new DemoteCommand($this));
+        $this->registerCommand(new DisbandCommand());
+        $this->registerCommand(new KickCommand());
+        $this->registerCommand(new FireCommand());
+        $this->registerCommand(new PromoteCommand());
+        $this->registerCommand(new DemoteCommand());
         $this->registerCommand(new SetSpawnCommand());
-        $this->registerCommand(new TransferCommand($this));
-        $this->registerCommand(new CooperateCommand($this));
+        $this->registerCommand(new TransferCommand());
+        $this->registerCommand(new CooperateCommand());
         parent::__construct("isle", "SkyBlock command", "Usage: /is", [
             "island",
             "is",
@@ -74,7 +74,7 @@ class IsleCommandMap extends Command implements PluginIdentifiableCommand {
         ]);
         Skylands::getInstance()->getServer()->getCommandMap()->register("skyblock", $this);
     }
-    
+
     /**
      * @return Skylands|Plugin
      */

@@ -17,12 +17,8 @@ use BreathTakinglyBinary\Skylands\session\Session;
 use BreathTakinglyBinary\Skylands\Skylands;
 
 class VisitCommand extends IsleCommand {
-    
-    /**
-     * VisitCommand constructor.
-     * @param IsleCommandMap $map
-     */
-    public function __construct(IsleCommandMap $map) {
+
+    public function __construct() {
         parent::__construct(["visit", "teleport", "tp"], "VISIT_USAGE", "VISIT_DESCRIPTION");
     }
 

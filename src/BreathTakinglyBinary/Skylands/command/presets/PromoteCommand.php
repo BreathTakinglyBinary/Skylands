@@ -17,12 +17,8 @@ use BreathTakinglyBinary\Skylands\session\Session;
 use BreathTakinglyBinary\Skylands\Skylands;
 
 class PromoteCommand extends IsleCommand {
-    
-    /**
-     * PromoteCommand constructor.
-     * @param IsleCommandMap $map
-     */
-    public function __construct(IsleCommandMap $map) {
+
+    public function __construct() {
         parent::__construct(["promote"], "PROMOTE_USAGE", "PROMOTE_DESCRIPTION");
     }
     

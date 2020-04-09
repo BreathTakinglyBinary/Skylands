@@ -17,12 +17,8 @@ use BreathTakinglyBinary\Skylands\session\Session;
 use BreathTakinglyBinary\Skylands\Skylands;
 
 class DemoteCommand extends IsleCommand {
-    
-    /**
-     * DemoteCommand constructor.
-     * @param IsleCommandMap $map
-     */
-    public function __construct(IsleCommandMap $map) {
+
+    public function __construct() {
         parent::__construct(["demote"], "DEMOTE_USAGE", "DEMOTE_DESCRIPTION");
     }
     
