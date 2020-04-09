@@ -189,9 +189,19 @@ class SkylandsListener implements Listener {
     public function onHurt(EntityDamageEvent $event): void {
         $entity = $event->getEntity();
         $level = $entity->getLevel();
-        if($level === null) return;
+        if(!$entity instanceof Player){
+            return;
+        }
+
+        if($level === null){
+            return;
+        }
+
         $isle = $this->isleManager->getIsle($level->getName());
-        if($isle === null) return;
+        if($isle === null){
+            return;
+        }
+
         if($event instanceof EntityDamageByEntityEvent) {
             $damager = $event->getDamager();
             if(($entity instanceof Player or ($entity instanceof Painting and $damager instanceof Player
