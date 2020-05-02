@@ -17,49 +17,58 @@ use BreathTakinglyBinary\Skylands\event\session\SessionOpenEvent;
 use BreathTakinglyBinary\Skylands\Skylands;
 
 class SessionManager {
+
+    /** @var SessionManager */
+    private static $instance;
     
-    /** @var Session[] */
+    /** @var SkylandsSession[] */
     private $sessions = [];
 
     public function __construct() {
-        Skylands::getInstance()->getServer()->getPluginManager()->registerEvents(new SessionListener($this), Skylands::getInstance());
+        if(self::$instance instanceof SessionManager){
+            throw new \RuntimeException("Only one instance of " . self::class . " allowed at one time!");
+        }
+        self::$instance = $this;
+    }
+
+    /**
+     * @return SessionManager
+     */
+    public static function getInstance() : SessionManager{
+        return self::$instance;
     }
     
     /**
-     * @return Session[]
+     * @return SkylandsSession[]
      */
     public function getSessions(): array {
         return $this->sessions;
     }
     
     /**
-     * @param string $username
-     * @return null|OfflineSession
-     */
-    public function getOfflineSession(string $username): ?OfflineSession {
-        return new OfflineSession($this, $username);
-    }
-    
-    /**
      * @param Player $player
-     * @return null|Session
+     * @return SkylandsSession
      */
-    public function getSession(Player $player): ?Session {
+    public function getSession(Player $player): SkylandsSession {
+        if(!isset($this->sessions[$player->getName()])){
+            $this->openSession($player);
+        }
+
         return $this->sessions[$player->getName()] ?? null;
     }
 
     /**
      * @param Player $player
-     * @throws \ReflectionException
      */
     public function openSession(Player $player): void {
-        $this->sessions[$username = $player->getName()] = new Session($this, $player);
-        (new SessionOpenEvent($this->sessions[$username]))->call();
+        $session = new SkylandsSession($player);
+        $this->sessions[$player->getName()] = $session;
+        (new SessionOpenEvent($session))->call();
+        Skylands::getInstance()->getProvider()->loadSession($session);
     }
 
     /**
      * @param Player $player
-     * @throws \ReflectionException
      */
     public function closeSession(Player $player): void {
         if(isset($this->sessions[$username = $player->getName()])) {
@@ -67,9 +76,6 @@ class SessionManager {
             $session->save();
             (new SessionCloseEvent($session))->call();
             unset($this->sessions[$username]);
-            if($session->hasIsle()) {
-                $session->getIsle()->tryToClose();
-            }
         }
     }
     

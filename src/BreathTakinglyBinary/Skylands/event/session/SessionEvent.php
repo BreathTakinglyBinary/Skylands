@@ -11,10 +11,11 @@ declare(strict_types=1);
 namespace BreathTakinglyBinary\Skylands\event\session;
 
 
-use BreathTakinglyBinary\Skylands\event\SkyBlockEvent;
+use BreathTakinglyBinary\Skylands\event\Skylands;
 use BreathTakinglyBinary\Skylands\session\Session;
+use BreathTakinglyBinary\Skylands\session\SkylandsSession;
 
-abstract class SessionEvent extends SkyBlockEvent {
+abstract class SessionEvent extends Skylands {
     
     /** @var Session */
     private $session;
@@ -23,7 +24,7 @@ abstract class SessionEvent extends SkyBlockEvent {
      * SessionEvent constructor.
      * @param Session $session
      */
-    public function __construct(Session $session) {
+    public function __construct(SkylandsSession $session) {
         $this->session = $session;
     }
     

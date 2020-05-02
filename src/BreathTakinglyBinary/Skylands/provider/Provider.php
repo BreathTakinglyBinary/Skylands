@@ -12,8 +12,7 @@ namespace BreathTakinglyBinary\Skylands\provider;
 
 
 use BreathTakinglyBinary\Skylands\isle\Isle;
-use BreathTakinglyBinary\Skylands\session\BaseSession;
-use BreathTakinglyBinary\Skylands\Skylands;
+use BreathTakinglyBinary\Skylands\session\SkylandsSession;
 
 abstract class Provider {
 
@@ -21,33 +20,28 @@ abstract class Provider {
         $this->initialize();
     }
     
-    public abstract function initialize(): void;
+    abstract public function initialize(): void;
     
     /**
-     * @param BaseSession $session
+     * @param SkylandsSession $session
      */
-    public abstract function loadSession(BaseSession $session): void;
+    abstract public function loadSession(SkylandsSession $session): void;
     
     /**
-     * @param BaseSession $session
+     * @param SkylandsSession $session
      */
-    public abstract function saveSession(BaseSession $session): void;
+    abstract public function saveSession(SkylandsSession $session): void;
 
     /**
      * @param string $identifier
      *
      * @return bool
      */
-    public abstract function loadIsle(string $identifier): bool;
+    abstract public function loadIsle(string $identifier): bool;
     
     /**
      * @param Isle $isle
      */
-    public abstract function saveIsle(Isle $isle): void;
+    abstract public function saveIsle(Isle $isle): void;
 
-    /**
-     * @param string $isleId
-     */
-    public abstract function deleteIsleData(string $isleId): void;
-    
 }

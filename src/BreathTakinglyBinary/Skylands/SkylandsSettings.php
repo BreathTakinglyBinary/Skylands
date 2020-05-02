@@ -11,9 +11,14 @@ declare(strict_types=1);
 namespace BreathTakinglyBinary\Skylands;
 
 
+use BreathTakinglyBinary\Skylands\isle\IsleType;
+use BreathTakinglyBinary\Skylands\locale\TranslationManager;
 use pocketmine\item\Item;
 
 class SkylandsSettings {
+
+    /** @var SkylandsSettings */
+    private static $instance;
     
     /** @var array */
     private $data;
@@ -22,7 +27,7 @@ class SkylandsSettings {
     private $defaultChest;
     
     /** @var array */
-    private $chestPerGenerator;
+    private $chestPerIsleType;
     
     /** @var string[] */
     private $messages = [];
@@ -30,32 +35,31 @@ class SkylandsSettings {
     /** @var int */
     private $cooldownDuration;
 
-    /** @var bool */
-    private $preventVoidDamage;
-
-    /** @var array */
-    private $isleBlockedCommands = [];
+    /** @var int */
+    private $maxHelperIsles = 3;
     
     /**
      * SkyBlockSettings constructor.
      */
     public function __construct() {
         $this->refresh();
+        self::$instance = $this;
     }
-    
+
     /**
-     * @return Item[]
+     * @return SkylandsSettings
      */
-    public function getDefaultChest(): array {
-        return $this->defaultChest;
+    public static function getInstance() : SkylandsSettings{
+        return self::$instance;
     }
     
     /**
-     * @param string $generator
+     * @param IsleType $isleType
+     *
      * @return array
      */
-    public function getChestPerGenerator(string $generator): array {
-        return $this->chestPerGenerator[$generator] ?? $this->defaultChest;
+    public function getChestPerIsleType(IsleType $isleType): array {
+        return $this->chestPerIsleType[$isleType->getName()] ?? $this->defaultChest;
     }
     
     /**
@@ -70,20 +74,6 @@ class SkylandsSettings {
      */
     public function getCooldownDuration(): int {
         return $this->cooldownDuration;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isPreventVoidDamage(): bool {
-        return $this->preventVoidDamage;
-    }
-
-    /**
-     * @return array
-     */
-    public function getIsleBlockedCommands(): array {
-        return $this->isleBlockedCommands;
     }
 
     /**
@@ -102,16 +92,24 @@ class SkylandsSettings {
 
     public function refresh(): void {
         $this->data = json_decode(file_get_contents(Skylands::getInstance()->getDataFolder() . "settings.json"), true);
-        $this->messages = json_decode(file_get_contents(Skylands::getInstance()->getDataFolder() . "messages.json"), true);
+        $messages = json_decode(file_get_contents(Skylands::getInstance()->getDataFolder() . "messages.json"), true);
+        foreach ($messages as $identifier => $message){
+            TranslationManager::registerMessage($identifier, $message);
+        }
         $this->defaultChest = Skylands::parseItems($this->data["default-chest"]);
-        $this->chestPerGenerator = [];
-        foreach($this->data["chest-per-generator"] as $world => $items) {
-            $this->chestPerGenerator[$world] = Skylands::parseItems($items);
+        $this->chestPerIsleType = [];
+        foreach($this->data["chest-per-isle-type"] as $world => $items) {
+            $this->chestPerIsleType[$world] = Skylands::parseItems($items);
         }
         $this->cooldownDuration = $this->data["cooldown-duration-minutes"] ?? 20;
         $this->preventVoidDamage = $this->data["prevent-void-damage"] ?? true;
-        $this->isleBlockedCommands = $this->data["commands-blocked-in-isles"] ?? [];
-        $this->isleBlockedCommands = array_map("strtolower", $this->isleBlockedCommands);
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxHelperIsles() : int{
+        return $this->maxHelperIsles;
     }
     
 }

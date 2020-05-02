@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace BreathTakinglyBinary\Skylands\event\isle;
 
 
-use BreathTakinglyBinary\Skylands\event\SkyBlockEvent;
+use BreathTakinglyBinary\Skylands\event\Skylands;
 use BreathTakinglyBinary\Skylands\isle\Isle;
 
-abstract class IsleEvent extends SkyBlockEvent {
+abstract class IsleEvent extends Skylands {
     
     /** @var Isle */
     private $isle;

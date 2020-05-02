@@ -10,16 +10,17 @@ declare(strict_types=1);
 
 namespace BreathTakinglyBinary\Skylands;
 
-use BreathTakinglyBinary\Skylands\command\IsleCommandMap;
-use BreathTakinglyBinary\Skylands\generator\IsleGeneratorManager;
+use BreathTakinglyBinary\DynamicCore\generators\VoidGenerator;
+use BreathTakinglyBinary\Skylands\command\BaseIsleCommand;
 use BreathTakinglyBinary\Skylands\isle\IsleManager;
 use BreathTakinglyBinary\Skylands\provider\json\JSONProvider;
 use BreathTakinglyBinary\Skylands\provider\Provider;
+use BreathTakinglyBinary\Skylands\provider\sqlite\SQLiteProvider;
 use BreathTakinglyBinary\Skylands\session\SessionManager;
 use pocketmine\item\Item;
-use pocketmine\level\Position;
+use pocketmine\level\generator\GeneratorManager;
 use pocketmine\plugin\PluginBase;
-use pocketmine\Server;
+use pocketmine\plugin\PluginLogger;
 use pocketmine\utils\TextFormat;
 
 class Skylands extends PluginBase {
@@ -39,32 +40,19 @@ class Skylands extends PluginBase {
     /** @var IsleManager */
     private $isleManager;
 
-    /** @var IsleCommandMap */
-    private $commandMap;
-
-    /** @var IsleGeneratorManager */
-    private $generatorManager;
-
     /** @var SkylandsListener */
     private $eventListener;
 
-    public function onLoad(): void {
-        self::$object = $this;
-        if(!is_dir($this->getDataFolder())) {
-            mkdir($this->getDataFolder());
-        }
-        $this->saveResource("messages.json");
-        $this->saveResource("settings.json");
-    }
-
     public function onEnable(): void {
+        self::$object = $this;
+        $this->loadResources();
+        GeneratorManager::addGenerator(VoidGenerator::class, "void");
         $this->settings = new SkylandsSettings();
-        $this->provider = new JSONProvider();
+        $this->provider = new SQLiteProvider();
         $this->sessionManager = new SessionManager();
         $this->isleManager = new IsleManager();
-        $this->generatorManager = new IsleGeneratorManager();
-        $this->commandMap = new IsleCommandMap();
-        $this->eventListener = new SkylandsListener();
+        $this->getServer()->getPluginManager()->registerEvents(new SkylandsListener(), $this);
+        $this->getServer()->getCommandMap()->register("skylands", new BaseIsleCommand());
         if($this->getServer()->getSpawnRadius() > -1) {
             $this->getLogger()->warning("Please, disable the spawn protection on your server.properties, otherwise Skylands won't work correctly");
         }
@@ -81,6 +69,13 @@ class Skylands extends PluginBase {
      */
     public static function getInstance(): Skylands {
         return self::$object;
+    }
+
+    /**
+     * @return PluginLogger
+     */
+    public static function logger() : PluginLogger{
+        return self::$object->getLogger();
     }
 
     /**
@@ -111,34 +106,11 @@ class Skylands extends PluginBase {
         return $this->isleManager;
     }
 
-    /**
-     * @return IsleGeneratorManager
-     */
-    public function getGeneratorManager(): IsleGeneratorManager {
-        return $this->generatorManager;
-    }
-
-    /**
-     * @param Position $position
-     * @return string
-     */
-    public static function writePosition(Position $position): string {
-        return "{$position->getLevel()->getName()},{$position->getX()},{$position->getY()},{$position->getZ()}";
-    }
-
-    /**
-     * @param string $position
-     * @return null|Position
-     */
-    public static function parsePosition(string $position): ?Position {
-        $array = explode(",", $position);
-        if(isset($array[3])) {
-            $level = Server::getInstance()->getLevelByName($array[0]);
-            if($level !== null) {
-                return new Position((float) $array[1],(float) $array[2],(float) $array[3], $level);
-            }
+    private function loadResources() : void{
+        foreach($this->getResources() as $splFileInfo){
+            $filePath = str_replace($this->getFile() . "resources" . DIRECTORY_SEPARATOR, "", $splFileInfo->getPathname());
+            $this->saveResource($filePath);
         }
-        return null;
     }
 
     /**
@@ -202,30 +174,6 @@ class Skylands extends PluginBase {
         $message = str_replace("{ITALIC}", TextFormat::ITALIC, $message);
         $message = str_replace("{RESET}", TextFormat::RESET, $message);
         return $message;
-    }
-
-    /**
-     * @return string
-     */
-    public static function generateUniqueId(): string {
-        return uniqid("is-");
-    }
-
-    /**
-     * Thanks to the community at StackOverflow for this:
-     * https://stackoverflow.com/questions/11267086/php-unlink-all-files-within-a-directory-and-then-deleting-that-directory
-     *
-     * @param $directory
-     */
-    public static function recursiveRemoveDirectory($directory){
-        foreach(glob("{$directory}/*") as $file){
-            if(is_dir($file)){
-                self::recursiveRemoveDirectory($file);
-            }else{
-                unlink($file);
-            }
-        }
-        rmdir($directory);
     }
 
 }
