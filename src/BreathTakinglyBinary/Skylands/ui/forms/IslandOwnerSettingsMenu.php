@@ -17,7 +17,7 @@ class IslandOwnerSettingsMenu extends SimpleForm{
         if(!$island instanceof Isle){
             throw new \RuntimeException("IslandOwnerSettingsMenu being created for player with no island!");
         }
-        $lockAction = $island->isLocked() ? "Unlock" : "Lock";
+        $lockAction = $island->isLocked() ? "Lock" : "Unlock";
 
         $this->setTitle("Island Settings");
 
