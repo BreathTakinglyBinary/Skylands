@@ -37,7 +37,7 @@ class IslandOwnerSettingsMenu extends SimpleForm{
         switch($data){
             case 0:
                 $island->setLocked(!$island->isLocked());
-                $lockAction = $island->isLocked() ? "Unlocked" : "Locked";
+                $lockAction = $island->isLocked() ? "Locked" : "Unlocked";
                 $player->sendMessage("Your island has been $lockAction!");
                 break;
             case 1:
