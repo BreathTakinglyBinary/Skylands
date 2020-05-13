@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace BreathTakinglyBinary\Skylands\ui\forms\skyblock;
 
-
 use BreathTakinglyBinary\libDynamicForms\SimpleForm;
 use BreathTakinglyBinary\Skylands\isle\Isle;
 use BreathTakinglyBinary\Skylands\Skylands;
@@ -17,7 +16,7 @@ class IslandOwnerSettingsMenu extends SimpleForm{
         if(!$island instanceof Isle){
             throw new \RuntimeException("IslandOwnerSettingsMenu being created for player with no island!");
         }
-        $lockAction = $island->isLocked() ? "Unlock" : "Lock";
+        $lockAction = $island->isLocked() ? "Lock" : "Unlock";
 
         $this->setTitle("Island Settings");
 
