@@ -23,7 +23,7 @@ class VisitIslandsMenu extends SimpleForm{
             $playerIsleId = $isle->getIdentifier();
         }
         foreach($skyBlock->getIsleManager()->getIsles() as $isle){
-            if(!$isle->isLocked() and $isle->getIdentifier() !== $playerIsleId){
+            if($isle->isLocked() === false and $isle->getIdentifier() !== $playerIsleId){
                 $this->addButton($isle->getIdentifier(), $isle->getIdentifier());
                 $this->isles[$isle->getIdentifier()] = $isle;
             }
