@@ -11,29 +11,29 @@ class TranslationManager{
 
     private static $colorKey = [
         "&" => TextFormat::ESCAPE,
-        "{BLACK}" => TextFormat::BLACK,
-        "{DARK_BLUE}" => TextFormat::DARK_BLUE,
-        "{DARK_GREEN}" => TextFormat::DARK_GREEN,
-        "{DARK_AQUA}" => TextFormat::DARK_AQUA,
-        "{DARK_RED}" => TextFormat::DARK_RED,
-        "{DARK_PURPLE}" => TextFormat::DARK_PURPLE,
-        "{DARK_GRAY}" => TextFormat::DARK_GRAY,
-        "{ORANGE}" => TextFormat::GOLD,
-        "{GOLD}" => TextFormat::GOLD,
-        "{GRAY}" => TextFormat::GRAY,
-        "{BLUE}" => TextFormat::BLUE,
-        "{GREEN}" => TextFormat::GREEN,
-        "{AQUA}" => TextFormat::AQUA,
-        "{RED}" => TextFormat::RED,
-        "{LIGHT_PURPLE}" => TextFormat::LIGHT_PURPLE,
-        "{YELLOW}" => TextFormat::YELLOW,
-        "{WHITE}" => TextFormat::WHITE,
-        "{OBFUSCATED}" => TextFormat::OBFUSCATED,
-        "{BOLD}" => TextFormat::BOLD,
-        "{STRIKETHROUGH}" => TextFormat::STRIKETHROUGH,
-        "{UNDERLINE}" => TextFormat::UNDERLINE,
-        "{ITALIC}" => TextFormat::ITALIC,
-        "{RESET}" => TextFormat::RESET
+        "BLACK" => TextFormat::BLACK,
+        "DARK_BLUE" => TextFormat::DARK_BLUE,
+        "DARK_GREEN" => TextFormat::DARK_GREEN,
+        "DARK_AQUA" => TextFormat::DARK_AQUA,
+        "DARK_RED" => TextFormat::DARK_RED,
+        "DARK_PURPLE" => TextFormat::DARK_PURPLE,
+        "DARK_GRAY" => TextFormat::DARK_GRAY,
+        "ORANGE" => TextFormat::GOLD,
+        "GOLD" => TextFormat::GOLD,
+        "GRAY" => TextFormat::GRAY,
+        "BLUE" => TextFormat::BLUE,
+        "GREEN" => TextFormat::GREEN,
+        "AQUA" => TextFormat::AQUA,
+        "RED" => TextFormat::RED,
+        "LIGHT_PURPLE" => TextFormat::LIGHT_PURPLE,
+        "YELLOW" => TextFormat::YELLOW,
+        "WHITE" => TextFormat::WHITE,
+        "OBFUSCATED" => TextFormat::OBFUSCATED,
+        "BOLD" => TextFormat::BOLD,
+        "STRIKETHROUGH" => TextFormat::STRIKETHROUGH,
+        "UNDERLINE" => TextFormat::UNDERLINE,
+        "ITALIC" => TextFormat::ITALIC,
+        "RESET" => TextFormat::RESET
     ];
 
     /** @var String[] */
@@ -56,7 +56,7 @@ class TranslationManager{
 
     private static function textUpdateFromArgs(string $text, array $args) : string{
         foreach($args as $k => $v){
-            $newMsg = \str_replace($k, $v, $text);
+            $newMsg = \str_replace("{" . $k . "}", $v, $text);
             if(!is_string($newMsg)){
                 throw new RuntimeException("TranslationManager::getTextUpdateFromArgs() got an unexpected value when trying to replace execute str_replace() using $k with $v in message \"$text\"");
             }

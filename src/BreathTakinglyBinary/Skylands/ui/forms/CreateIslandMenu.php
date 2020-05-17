@@ -61,10 +61,10 @@ class CreateIslandMenu extends CustomForm{
             throw new FormValidationException("Allow visitors data was not found in the returned form data. Repsone provided by " . $player->getName());
         }
 
-        $locked = (bool) $data["visitors"];
+        $locked = !((bool) $data["visitors"]);
         $isle = $this->isleManager->createIsle($player, $type, $name, $locked);
         $session->setIsleId($isle->getIdentifier());
         $session->save();
-        $player->sendMessage(TranslationManager::getTranslatedMessage("SUCCESSFULLY_CREATED_A_ISLE"));
+        $player->sendMessage(TranslationManager::getTranslatedMessage("FORM_MESSAGE_SUCCESSFULLY_CREATED_A_ISLE"));
     }
 }

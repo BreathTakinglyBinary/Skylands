@@ -24,7 +24,7 @@ class IslandOwnerSettingsMenu extends SimpleForm{
         $this->addButton($lockAction . " Island", "lock");
         $this->addButton("Invite a Player", "invite");
         $this->addButton("Remove a Player", "remove");
-        $this->addButton("Reset Island", "reset");
+        //$this->addButton("Reset Island", "reset");
     }
 
     public function onResponse(Player $player, $data) : void{
@@ -33,13 +33,13 @@ class IslandOwnerSettingsMenu extends SimpleForm{
             return;
         }
         switch($data){
-            case 0:
+            case "lock":
                 $lockAction = $island->isLocked() ? "Unlocked" : "Locked";
                 $island->setLocked(!$island->isLocked());
                 $player->sendMessage("Your island has been $lockAction!");
                 break;
             case "invite":
-                $player->sendForm(new InviteToIslandMenu());
+                $player->sendForm(new InviteToIslandMenu($player, $this));
                 break;
             case "remove":
                 // TODO:

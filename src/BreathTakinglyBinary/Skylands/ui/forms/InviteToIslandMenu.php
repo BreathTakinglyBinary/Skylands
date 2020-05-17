@@ -4,25 +4,26 @@ declare(strict_types=1);
 namespace BreathTakinglyBinary\Skylands\ui\forms;
 
 
+use BreathTakinglyBinary\libDynamicForms\Form;
 use BreathTakinglyBinary\libDynamicForms\SimpleForm;
 use BreathTakinglyBinary\Skylands\isle\Isle;
 use BreathTakinglyBinary\Skylands\isle\IsleManager;
 use BreathTakinglyBinary\Skylands\locale\TranslationManager;
 use BreathTakinglyBinary\Skylands\session\SessionManager;
-use BreathTakinglyBinary\Skylands\SkylandsSettings;
 use pocketmine\Player;
 use pocketmine\Server;
-use BreathTakinglyBinary\Skylands\Skylands;
 
 class InviteToIslandMenu extends SimpleForm{
 
-    public function __construct(){
-        parent::__construct();
-        $this->setTitle("Invite Player to Island");
+    public function __construct(Player $player, ?Form $previousForm = null){
+        parent::__construct(TranslationManager::getTranslatedMessage("FORM_TITLE_INVITE_TO_ISLE"), $previousForm);
 
-        foreach(Server::getInstance()->getOnlinePlayers() as $player){
-                $this->addButton($player->getName(), $player->getName());
+        foreach(Server::getInstance()->getOnlinePlayers() as $onlinePlayer){
+            if($onlinePlayer !== $player){
+                $this->addButton($onlinePlayer->getDisplayName(), $onlinePlayer->getName());
+            }
         }
+        $this->addButton(TranslationManager::getTranslatedMessage("FORM_BUTTON_TEXT_BACK"));
     }
 
     public function onResponse(Player $player, $data) : void{
@@ -38,7 +39,6 @@ class InviteToIslandMenu extends SimpleForm{
             $player->sendForm(new SkylandsMainMenu($player, TranslationManager::getTranslatedMessage("MENU_MESSAGE_MUST_BE_ONLINE_TO_INVITE", ["name" => $data])));
             return;
         }
-        IsleManager::getInstance()->getInviteManager()->addInvitation($player, $helper);
-        $player->sendMessage(TranslationManager::getTranslatedMessage("INVITATION_SENT"));
+        $player->sendForm(new ConfirmSendInvite($helper->getName(), $this));
     }
 }

@@ -6,6 +6,7 @@ namespace BreathTakinglyBinary\Skylands\ui\forms;
 
 use BreathTakinglyBinary\libDynamicForms\SimpleForm;
 use BreathTakinglyBinary\Skylands\isle\Isle;
+use BreathTakinglyBinary\Skylands\locale\TranslationManager;
 use BreathTakinglyBinary\Skylands\Skylands;
 use pocketmine\Player;
 
@@ -15,7 +16,7 @@ class VisitIslandsMenu extends SimpleForm{
     private $isles = [];
 
     public function __construct(Player $player){
-        parent::__construct();
+        parent::__construct(TranslationManager::getTranslatedMessage("FORM_TITLE_VISIT_ISLE"));
         $skyBlock = Skylands::getInstance();
         $playerIsleId = "";
         $isle = $skyBlock->getSessionManager()->getSession($player)->getIsle();
@@ -24,7 +25,7 @@ class VisitIslandsMenu extends SimpleForm{
         }
         foreach($skyBlock->getIsleManager()->getIsles() as $isle){
             if(!$isle->isLocked() and $isle->getIdentifier() !== $playerIsleId){
-                $this->addButton($isle->getIdentifier(), $isle->getIdentifier());
+                $this->addButton($isle->getName(), $isle->getIdentifier());
                 $this->isles[$isle->getIdentifier()] = $isle;
             }
         }
@@ -33,10 +34,10 @@ class VisitIslandsMenu extends SimpleForm{
 
     public function onResponse(Player $player, $data) : void{
         if(isset($this->isles[$data])){
-            $player->teleport($this->isles[$data]->getSpawnLocation());
+            $player->teleport($this->isles[$data]->getLevel()->getSpawnLocation());
             return;
         }
         $msg = $data === "Back" ? null : "Island $data, is not available.";
-        $player->sendForm(new SkylandsMainMenu($msg));
+        $player->sendForm(new SkylandsMainMenu($player, $msg));
     }
 }

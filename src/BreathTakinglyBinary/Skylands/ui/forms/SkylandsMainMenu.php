@@ -59,21 +59,14 @@ class SkylandsMainMenu extends SimpleForm{
             case self::GO:
                 $player->teleport($session->getIsle()->getLevel()->getSpawnLocation());
                 break;
+            case self::INVITES:
+                $player->sendForm(new ManageInvitationsMainForm($this));
+                break;
             case self::VISIT:
                 $player->sendForm(new VisitIslandsMenu($player));
                 break;
             case self::SETTINGS:
-                $island = $session->getIsle();
-                if($island instanceof Isle){
-                    $player->sendForm(new IslandInformationMenu($island));
-                }else{
-                    //** This should never happen. */
-                    $player->sendForm(new SkylandsMainMenu($player, TranslationManager::getTranslatedMessage("MENU_MESSAGE_COULD_NOT_FIND_YOUR_ISLE")));
-                }
-                break;
-            case 3:
                 $player->sendForm(new IslandOwnerSettingsMenu($player));
-                break;
         }
     }
 }

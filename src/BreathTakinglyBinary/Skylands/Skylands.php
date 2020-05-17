@@ -13,7 +13,6 @@ namespace BreathTakinglyBinary\Skylands;
 use BreathTakinglyBinary\DynamicCore\generators\VoidGenerator;
 use BreathTakinglyBinary\Skylands\command\BaseIsleCommand;
 use BreathTakinglyBinary\Skylands\isle\IsleManager;
-use BreathTakinglyBinary\Skylands\provider\json\JSONProvider;
 use BreathTakinglyBinary\Skylands\provider\Provider;
 use BreathTakinglyBinary\Skylands\provider\sqlite\SQLiteProvider;
 use BreathTakinglyBinary\Skylands\session\SessionManager;
@@ -21,7 +20,6 @@ use pocketmine\item\Item;
 use pocketmine\level\generator\GeneratorManager;
 use pocketmine\plugin\PluginBase;
 use pocketmine\plugin\PluginLogger;
-use pocketmine\utils\TextFormat;
 
 class Skylands extends PluginBase {
 
@@ -39,9 +37,6 @@ class Skylands extends PluginBase {
 
     /** @var IsleManager */
     private $isleManager;
-
-    /** @var SkylandsListener */
-    private $eventListener;
 
     public function onEnable(): void {
         self::$object = $this;
@@ -143,37 +138,6 @@ class Skylands extends PluginBase {
             }
         }
         return $result;
-    }
-
-    /**
-     * @param string $message
-     * @return string
-     */
-    public static function translateColors(string $message): string {
-        $message = str_replace("&", TextFormat::ESCAPE, $message);
-        $message = str_replace("{BLACK}", TextFormat::BLACK, $message);
-        $message = str_replace("{DARK_BLUE}", TextFormat::DARK_BLUE, $message);
-        $message = str_replace("{DARK_GREEN}", TextFormat::DARK_GREEN, $message);
-        $message = str_replace("{DARK_AQUA}", TextFormat::DARK_AQUA, $message);
-        $message = str_replace("{DARK_RED}", TextFormat::DARK_RED, $message);
-        $message = str_replace("{DARK_PURPLE}", TextFormat::DARK_PURPLE, $message);
-        $message = str_replace("{ORANGE}", TextFormat::GOLD, $message);
-        $message = str_replace("{GRAY}", TextFormat::GRAY, $message);
-        $message = str_replace("{DARK_GRAY}", TextFormat::DARK_GRAY, $message);
-        $message = str_replace("{BLUE}", TextFormat::BLUE, $message);
-        $message = str_replace("{GREEN}", TextFormat::GREEN, $message);
-        $message = str_replace("{AQUA}", TextFormat::AQUA, $message);
-        $message = str_replace("{RED}", TextFormat::RED, $message);
-        $message = str_replace("{LIGHT_PURPLE}", TextFormat::LIGHT_PURPLE, $message);
-        $message = str_replace("{YELLOW}", TextFormat::YELLOW, $message);
-        $message = str_replace("{WHITE}", TextFormat::WHITE, $message);
-        $message = str_replace("{OBFUSCATED}", TextFormat::OBFUSCATED, $message);
-        $message = str_replace("{BOLD}", TextFormat::BOLD, $message);
-        $message = str_replace("{STRIKETHROUGH}", TextFormat::STRIKETHROUGH, $message);
-        $message = str_replace("{UNDERLINE}", TextFormat::UNDERLINE, $message);
-        $message = str_replace("{ITALIC}", TextFormat::ITALIC, $message);
-        $message = str_replace("{RESET}", TextFormat::RESET, $message);
-        return $message;
     }
 
 }

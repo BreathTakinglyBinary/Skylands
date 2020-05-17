@@ -28,9 +28,6 @@ class SkylandsSettings {
     
     /** @var array */
     private $chestPerIsleType;
-    
-    /** @var string[] */
-    private $messages = [];
 
     /** @var int */
     private $cooldownDuration;
@@ -61,33 +58,12 @@ class SkylandsSettings {
     public function getChestPerIsleType(IsleType $isleType): array {
         return $this->chestPerIsleType[$isleType->getName()] ?? $this->defaultChest;
     }
-    
-    /**
-     * @return string[]
-     */
-    public function getMessages(): array {
-        return $this->messages;
-    }
 
     /**
      * @return int
      */
     public function getCooldownDuration(): int {
         return $this->cooldownDuration;
-    }
-
-    /**
-     * @param string $identifier
-     * @param array $args
-     * @return string
-     */
-    public function getMessage(string $identifier, array $args = []): string {
-        $message = $this->messages[$identifier] ?? "Message ($identifier) not found";
-        $message = Skylands::translateColors($message);
-        foreach($args as $arg => $value) {
-            $message = str_replace("{" . $arg . "}", $value, $message);
-        }
-        return $message;
     }
 
     public function refresh(): void {
