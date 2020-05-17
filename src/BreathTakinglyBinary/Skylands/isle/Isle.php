@@ -148,7 +148,7 @@ class Isle{
     }
 
     /**
-     * @param Session $session
+     * @param Player $player
      *
      * @return bool
      */
