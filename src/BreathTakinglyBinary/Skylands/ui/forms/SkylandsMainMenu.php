@@ -6,10 +6,7 @@ namespace BreathTakinglyBinary\Skylands\ui\forms;
 
 use BreathTakinglyBinary\libDynamicForms\SimpleForm;
 use BreathTakinglyBinary\Skylands\isle\Isle;
-use BreathTakinglyBinary\Skylands\locale\TranslationManager;
 use BreathTakinglyBinary\Skylands\session\SessionManager;
-use BreathTakinglyBinary\Skylands\session\SkylandsSession;
-use BreathTakinglyBinary\Skylands\Skylands;
 use pocketmine\Player;
 
 class SkylandsMainMenu extends SimpleForm{
