@@ -5,7 +5,6 @@ namespace BreathTakinglyBinary\Skylands\provider\sqlite;
 
 use BreathTakinglyBinary\Skylands\isle\Isle;
 use BreathTakinglyBinary\Skylands\provider\Provider;
-use BreathTakinglyBinary\Skylands\session\BaseSession;
 use BreathTakinglyBinary\Skylands\session\SkylandsSession;
 use BreathTakinglyBinary\Skylands\Skylands;
 use pocketmine\Server;
